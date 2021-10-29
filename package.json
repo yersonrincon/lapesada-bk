@@ -1,0 +1,36 @@
+{
+    "name": "lapesada-bk",
+    "version": "1.0.0",
+    "description": "Este es BackEnd Curso Platzi - NodeJS.",
+    "main": "index.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "author": "",
+    "license": "ISC",
+    "dependencies": {
+        "@hapi/boom": "^9.1.1",
+        "bcryptjs": "^2.4.3",
+        "chalk": "^4.1.0",
+        "connect-multiparty": "^2.2.0",
+        "cookie-parser": "^1.4.5",
+        "dotenv": "^8.2.0",
+        "express": "^4.17.1",
+        "express-fileupload": "^1.2.0",
+        "express-jwt-scope": "^0.1.0",
+        "express-session": "^1.17.1",
+        "file-regex": "^3.1.0",
+        "fs": "0.0.1-security",
+        "handlebars": "^4.7.6",
+        "https": "^1.0.0",
+        "jsonwebtoken": "^8.5.1",
+        "memorystore": "^1.6.4",
+        "moment-timezone": "^0.5.33",
+        "morgan": "^1.10.0",
+        "mssql": "^6.3.1",
+        "passport": "^0.4.1",
+        "passport-http": "^0.3.0",
+        "passport-jwt": "^4.0.0",
+        "passport-local": "^1.0.0"
+    }
+}
