@@ -15,8 +15,10 @@ chalk.level = 3;
 const log = console.log;
 
 // parse application/json
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(bodyParser.json());
+//app.use(bodyParser.urlencoded({ extended: false }));
+//app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({limit: '50mb', extended: true}));
+app.use(bodyParser.json({limit: '50mb', extended: true}));
 app.use(morgan('dev'));
 
 app.use(cookieParser(process.env.DEFAULT_USER_COOKIE_PASS)); //OJO
