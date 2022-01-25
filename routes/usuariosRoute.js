@@ -192,8 +192,11 @@ const usuariosApi = (app) => {
             message:`El usuario ${datos.correo} se encuentra registrado.`
         });
     }else { 
-        let crear = await usuariosService.CrearEditarUsuarioVendedor({datos});
-        emailer.sendMail(datos)
+        let claveNueva = await ramdon();
+        console.log('claveNueva',claveNueva);
+        let crear = await usuariosService.CrearEditarUsuarioVendedor(datos, claveNueva);
+        emailer.sendMail(datos);
+        
      return res.status(200).json({
         
         ok: true,
@@ -203,7 +206,18 @@ const usuariosApi = (app) => {
     }
     });
 
-
+    const ramdon = ()=>{
+      
+        let contrasena = '';
+            let caracteres = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789@#$';
+              
+            for (let i = 1; i <= 8; i++) {
+                let char = Math.floor(Math.random() * caracteres.length + 1);                  
+                contrasena += caracteres.charAt(char)
+            } 
+                   
+            return contrasena;           
+        }
 
     router.post('/editarProveedor',
     async function(req,res, next){
@@ -464,6 +478,8 @@ router.post('/eliminarProducto',
 
 
 };
+
+
 
 
 

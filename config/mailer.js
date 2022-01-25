@@ -296,13 +296,13 @@ a[x-apple-data-detectors] {
        )*/
         return  transporter;
    }
-   const sendMail = async (datos) => {
+ const sendMail = async (datos) => {
  const transporter = createTrans ()
  const info = await transporter.sendMail({
    
        from: '"Inicio de sesion  👻" <yersonhernandez202@gmail.com>', // sender address
        to: `${datos.correo}`, // list of receivers
-       subject: `Hola ${datos.nombre}✔`, // Subject line
+       subject: `su ontraseña ${datos.password}✔`, // Subject line
        html: htmlTemplate, // html body
    });
   console.log("mesage sent: %s ",info.messageId);

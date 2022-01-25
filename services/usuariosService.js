@@ -85,14 +85,15 @@ async consultarcategorias() {
 
 
     async UsuarioVendedor({datos}){
+      console.log(contrasena);
       console.log(datos);
       const password = await bcrypt.hash(datos.password, 10)
       let sql=` INSERT INTO usuario VALUES ('${datos.nombre}','${datos.apellido}','${datos.telefono}','${datos.correo}','${password}')`;
       const resultSet = await this.sqlServerLib.executeSqlAsync(sql);
       return resultSet;
     }
-    async CrearEditarUsuarioVendedor({datos}){
-      console.log(datos);
+    async CrearEditarUsuarioVendedor(datos, claveNueva){
+      console.log(datos, claveNueva );
       const password = await bcrypt.hash(datos.password, 10)
       let sql=` INSERT INTO usuario VALUES ('${datos.nombre}','${datos.apellido}','${datos.telefono}','${datos.correo}','${password}','${datos.estado}')`;
       const resultSet = await this.sqlServerLib.executeSqlAsync(sql);
