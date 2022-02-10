@@ -24,7 +24,7 @@ const config = {
 };*/
 const dbConfig = {
     user: 'onjytmbaeiyzyy',
-    host: 'ec2-3-209-38-221.compute-1.amazonaws.com',
+    host: 'ec2-54-156-110-139.compute-1.amazonaws.com',
     database: 'd6tfa483tenko3',
     password: 'd4cbbfb9e1860e9295b5a0310cbba05e239d52ccedbee3b77605d21fe6ccd370',
     port: 5432,
