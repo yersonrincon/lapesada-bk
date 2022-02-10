@@ -1,4 +1,4 @@
-const SqlServerLib = require('../lib/sqlserverdb')
+const SqlServerLib = require("../lib/sqlserverdb");
 const bcrypt =require ("bcryptjs");
 class UsuariosService {
     constructor() {
