@@ -1,6 +1,6 @@
 const SqlServerLib = require("../lib/sqlserverdb");
 const bcrypt =require ("bcryptjs");
-class UsuariosService {
+class usuariosService {
     constructor() {
         this.sqlServerLib = new SqlServerLib();
     }
@@ -366,5 +366,5 @@ async consultaIdproducto() {
 }
 }
 
-module.exports = UsuariosService;
+module.exports =usuariosService;
 

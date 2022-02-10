@@ -1,5 +1,5 @@
 const express = require("express");
-const UsuariosService = require("../services/UsuariosService");
+const UsuariosService = require("../services/usuariosService");
 const emailer = require('..//config/mailer');
 
 
