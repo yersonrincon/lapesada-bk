@@ -54,9 +54,10 @@ app.use((req, res, next) => {
         res.header("Access-Control-Allow-Origin", origin); // restrict it to the required domain
     }
 
+
     res.header(
         "Access-Control-Allow-Headers",
-        "Origin, X-Requested-With, Content-Type, Accept, token, authorization, apiKeyToken, responseType, content-type"
+        "Origin, X-Requested-With, Content-Type, Accept, token, authorization, apiKeyToken, responseType, timeout, content-type"
     );
 
     res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, DELETE');
