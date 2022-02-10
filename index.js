@@ -1,4 +1,5 @@
 const express = require('express');
+const { variables } = require("./config");
 const bodyParser = require('body-parser');
 const usuariosApi =  require('./routes/usuariosRoute');
 const passport = require('passport');
@@ -17,8 +18,8 @@ const log = console.log;
 // parse application/json
 //app.use(bodyParser.urlencoded({ extended: false }));
 //app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({limit: '50mb', extended: true}));
-app.use(bodyParser.json({limit: '50mb', extended: true}));
+app.use(bodyParser.urlencoded({ extended: true}));
+app.use(bodyParser.json({extended: true}));
 app.use(morgan('dev'));
 
 app.use(cookieParser(process.env.DEFAULT_USER_COOKIE_PASS)); //OJO
@@ -33,9 +34,6 @@ app.use( //OJO
         saveUninitialized: true,
     })
 );
-app.use(passport.initialize()); //OJO
-app.use(passport.session()); //OJO
-
 
 app.use((req, res, next) => {
     let allowedOrigins = [
@@ -67,9 +65,9 @@ app.use((req, res, next) => {
 usuariosApi(app);
 
 //desarrollo
-app.listen(process.env.PORT, () => {
+app.listen(variables.PORT, () => {
 //eslint-disable-next-line no-console
 log(chalk.blueBright(
-  `Escuchando por el puerto http://localhost:${process.env.PORT}/api/`));
+  `Escuchando por el puerto http://localhost:${variables.PORT}/api/`));
 });
 
