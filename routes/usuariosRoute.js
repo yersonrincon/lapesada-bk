@@ -90,7 +90,7 @@ const usuariosApi = (app) => {
 
             async function(req, res, next) {
             const { body: datos } = req;
-        
+        console.log('datos',datos);
             let datosInsertados = await usuariosService.buscarUsuario({ datos });
            
             if(datosInsertados.length > 0){  
