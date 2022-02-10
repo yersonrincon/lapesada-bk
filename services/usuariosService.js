@@ -27,7 +27,7 @@ class usuariosService {
     async buscarUsuario({datos}) {
       let sql = `SELECT * FROM [dbo].[usuario] WHERE correo ='${datos.correo}'`;
       const resultSet = await this.sqlServerLib.executeSqlAsync(sql);
-      return resultSet;
+      return resultSet.rows;
   } 
   async buscarUsuarioCliente({datos}) {
   let sql = `SELECT * FROM cliente WHERE correo ='${datos.correo}'`;
