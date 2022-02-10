@@ -1,28 +1,13 @@
-const express = require('express');
+const express = require("express");
 const UsuariosService = require("../services/UsuariosService");
 const emailer = require('..//config/mailer');
-const fs = require('fs');
-const { request } = require('http');
-const { response } = require('express');
-const { userInfo } = require('os');
-const { generateKey } = require('crypto');
-const { decorators } = require('handlebars');
-const passport = require('passport');
-const jwt = require('jsonwebtoken');
-const  keys = require('..//config/keys');
-const { token } = require('morgan');
-
 
 
 const usuariosApi = (app) => {
 
     const router = express.Router();
     app.use('/api/administrador', router);
-    app.set('key', keys.key);
-    const usuariosService = new UsuariosService();
-
-  
-    
+    const usuariosService = new UsuariosService();    
 
     router.post('/crearProveedor',
     async function(req,res, next){
