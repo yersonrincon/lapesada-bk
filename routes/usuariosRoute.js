@@ -225,6 +225,7 @@ const usuariosApi = (app) => {
      
     async function(req, res, next){
       const{body: datos}=req;
+      console.log(datos)
       let datosLogin = await usuariosService.logincliente({datos});
 
      console.log('inportante este es el token ',token);
