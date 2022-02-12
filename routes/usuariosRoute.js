@@ -98,11 +98,12 @@ const usuariosApi = (app) => {
             });
             }
             });
+
             router.post('/crearUsuarioCliente',
 
             async function(req, res, next) {
             const { body: datos } = req;
-        console.log('llegamos',datos);
+            console.log('llegamos',datos);
             let datosInsertados = await usuariosService.buscarUsuarioCliente({ datos });
            
             if(datosInsertados.length > 0){  
@@ -193,7 +194,7 @@ const usuariosApi = (app) => {
      
     async function(req, res, next){
       const{body: datos}=req;
-      let datosLogin = await usuariosService.login({datos});
+      let datosLogin = await usuariosService.login({ datos });
     
       if(!datosLogin){
         return res.status(200).json({
@@ -204,7 +205,6 @@ const usuariosApi = (app) => {
         
     } else {
         let estado = await usuariosService.consultarEstado({datos});    
-    
        if(estado.estado == false){
         return res.status(200).json({
             ok: false,

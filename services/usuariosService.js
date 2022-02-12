@@ -8,7 +8,7 @@ class usuariosService {
     async crearUsuario({datos}){
         console.log(datos);
         const password = await bcrypt.hash(datos.password, 10)
-        let sql= `INSERT INTO usuario VALUES ('${datos.nombre}','${datos.apellido}','${datos.telefono}','${datos.correo}','${password}',1)`;
+        let sql= `INSERT INTO usuario (nombre,apellido,telefono,correo,password,estado) VALUES ('${datos.nombre}','${datos.apellido}','${datos.telefono}','${datos.correo}','${password}',true)`;
  
         const resultSet = await this.sqlServerLib.executeSqlAsync(sql);
 
@@ -18,47 +18,49 @@ class usuariosService {
     async crearUsuarioCliente({datos}){
       console.log(datos);
       const password = await bcrypt.hash(datos.password, 10)
-      let sql= `INSERT INTO cliente VALUES ('${datos.nombre}','${datos.apellido}','${datos.telefono}','${datos.correo}','${password}')`;
+      let sql= `INSERT INTO cliente (nombre, apellido,telefono, correo,password) VALUES ('${datos.nombre}','${datos.apellido}','${datos.telefono}','${datos.correo}','${password}')`;
+      console.log(sql);
       const resultSet = await this.sqlServerLib.executeSqlAsync(sql);
-      return resultSet;
+      return resultSet.rows;
 
   }
 
     async buscarUsuario({datos}) {
-      let sql = `SELECT * FROM [dbo].[usuario] WHERE correo ='${datos.correo}'`;
+      console.log(datos)
+      let sql = `SELECT * FROM usuario WHERE correo ='${datos.correo}'`;
       const resultSet = await this.sqlServerLib.executeSqlAsync(sql);
       return resultSet.rows;
   } 
-  async buscarUsuarioCliente({datos}) {
-  let sql = `SELECT * FROM cliente WHERE correo ='${datos.correo}'`;
-    const resultSet = await this.sqlServerLib.executeSqlAsync(sql);
-    return resultSet;
-} 
+ 
   async crearProducto({datos}){
-    //   console.log(datos);
-       let sql=` INSERT INTO producto VALUES ('${datos.nombre}','${datos.marca}','${datos.preciocompra}','${datos.precioventa}','${datos.descripcion}','${datos.cantidad}','${datos.categoria}','${datos.codigo}','${datos.imagen}')`;
+       console.log(datos);
+       let sql=` INSERT INTO producto (nombre,marca,preciocompra,precioventa,descripcion,cantidad,categoria,codigo,imagen) VALUES ('${datos.nombre}','${datos.marca}','${datos.preciocompra}','${datos.precioventa}','${datos.descripcion}','${datos.cantidad}','${datos.categoria}','${datos.codigo}','${datos.imagen}')`;
        const resultSet = await this.sqlServerLib.executeSqlAsync(sql);
-       return resultSet;
+       return resultSet.rows;
      }
 
   async buscarProducto({datos}) {
-    let sql = `SELECT * FROM [dbo].[producto] WHERE nombre ='${datos.nombre}'`;
+    let sql = `SELECT * FROM  producto WHERE nombre ='${datos.nombre}'`;
     const resultSet = await this.sqlServerLib.executeSqlAsync(sql);
     return resultSet;
 } 
 
   async buscarUsuarioVendedor({datos}){
-    let sql =`SELECT * FROM [dbo].[usuario] WHERE correo ='${datos.correo}'`;
+    let sql =`SELECT * FROM  usuario  WHERE correo ='${datos.correo}'`;
      const resultSet = await this.sqlServerLib.executeSqlAsync(sql);
-      return resultSet;
+      return resultSet.rows;
   }
-
+  async buscarUsuarioCliente({datos}) {
+    let sql = `SELECT * FROM cliente WHERE correo ='${datos.correo}'`;
+      const resultSet = await this.sqlServerLib.executeSqlAsync(sql);
+      return resultSet.rows;
+  } 
 
 
 async consultarListaImagenes() {
   let sql = `SELECT * FROM empresa`;
   const resultSet = await this.sqlServerLib.executeSqlAsync(sql);
-  return resultSet;
+  return resultSet.rows;
 }  
   
   async logincliente({datos}){
@@ -68,12 +70,12 @@ async consultarListaImagenes() {
     let sql = `SELECt * from cliente where  correo='${datos.correo}'`; 
     
      resultSet = await this.sqlServerLib.executeSqlAsync(sql);
-   console.log(resultSet);
-    if (resultSet[0]){
-      console.log('entro 1');
-      if (bcrypt.compareSync(datos.password, resultSet[0].password)) {
-        console.log('entro 2');
-          return resultSet[0];
+     
+    if (resultSet.rows.length > 0){
+    
+      if (bcrypt.compareSync(datos.password, resultSet.rows[0].password)) {
+       
+          return resultSet.rows[0];
           
       } else {
           return false;
@@ -89,12 +91,15 @@ async consultarListaImagenes() {
 async login({datos}){
   console.log(datos);
   let resultSet;
-  let sql = `SELECt * from usuario where  correo='${datos.correo}'`; 
+  let sql = `select * from usuario where correo='${datos.correo}'`; 
    resultSet = await this.sqlServerLib.executeSqlAsync(sql);
-
-  if (resultSet[0] ){
-    if (bcrypt.compareSync(datos.password, resultSet[0].password)) {
-        return resultSet[0];
+   console.log('fsdfd',resultSet.rows[0]);
+  
+  if (resultSet.rows.length > 0 ){
+    console.log('fsdfd',resultSet.rows[0]);
+    if (bcrypt.compareSync(datos.password, resultSet.rows[0].password)) {
+     
+        return resultSet.rows[0];
     } else {
         return false;
     }
@@ -108,7 +113,7 @@ async consultarEstado({datos}) {
 console.log(datos);
 let sql = `Select estado from usuario where correo='${datos.correo}'`;
 const resultSet = await this.sqlServerLib.executeSqlAsync(sql);
-return resultSet[0];
+return resultSet.rows[0];
 } 
 
 
@@ -123,14 +128,14 @@ return resultSet[0];
     async CrearEditarUsuarioVendedor(datos, claveNueva){
       console.log(datos, claveNueva );
       const password = await bcrypt.hash(claveNueva, 10);
-      let sql=` INSERT INTO usuario VALUES ('${datos.nombre}','${datos.apellido}','${datos.telefono}','${datos.correo}','${password}','${datos.estado}')`;
+      let sql=` INSERT INTO usuario (nombre,apellido,telefono,correo,password,estado) VALUES ('${datos.nombre}','${datos.apellido}','${datos.telefono}','${datos.correo}','${password}','${datos.estado}')`;   
       const resultSet = await this.sqlServerLib.executeSqlAsync(sql);
       return resultSet;
     }
     async RecuperarPasswordCliente(datos, enlace){
       console.log(datos, enlace );
       const password = await bcrypt.hash(enlace, 10);
-      let sql = `UPDATE [dbo].[cliente] SET  password='${datos.enlace}'`;
+      let sql = `UPDATE cliente SET  password='${datos.enlace}'`;
       sql += ` WHERE correo='${datos.correo}'`;
       const resultSet = await this.sqlServerLib.executeSqlAsync(sql);
       return resultSet;
@@ -147,7 +152,7 @@ return resultSet[0];
 
     async crearProveedor({datos}){
         console.log(datos);
-        let sql=` INSERT INTO proveedor VALUES ('${datos.nombre}','${datos.direccion}','${datos.apellido}','${datos.telefono}','${datos.empresa}','${datos.correo}')`;
+        let sql=` INSERT INTO proveedor (nombre,direccion,apellido,telefono,empresa,correo) VALUES  ('${datos.nombre}','${datos.direccion}','${datos.apellido}','${datos.telefono}','${datos.empresa}','${datos.correo}')`;
         const resultSet = await this.sqlServerLib.executeSqlAsync(sql);
         return resultSet;
       }
@@ -155,33 +160,33 @@ return resultSet[0];
     
       async crearCategoria({datos}){
           console.log(datos);
-           let sql=` INSERT INTO categorias VALUES ('${datos.nombre}','${datos.descripcion}',1 )`;
+           let sql=` INSERT INTO categorias (nombre,descripcion,estado) VALUES ('${datos.nombre}','${datos.descripcion}',true)`;
            const resultSet = await this.sqlServerLib.executeSqlAsync(sql);
            return resultSet;
          }
 
          async crearMarca({datos}){
           console.log(datos);
-           let sql=` INSERT INTO marca VALUES ('${datos.nombre}','${datos.descripcion}','${datos.imagen}',1 )`;
+           let sql=` INSERT INTO marca(nombre,descripcion,imagen,estado) VALUES ('${datos.nombre}','${datos.descripcion}','${datos.imagen}',true )`;
            const resultSet = await this.sqlServerLib.executeSqlAsync(sql);
            return resultSet;
          }
          async crearEmpresa({datos}){
           console.log(datos);
-           let sql=` INSERT INTO empresa VALUES ('${datos.nombre}','${datos.nit}','${datos.correo}','${datos.telefono}','${datos.direccion}','${datos.imagen}')`;
+           let sql=` INSERT INTO empresa(nombre,nit,correo,telefono,direccion,imagen) VALUES ('${datos.nombre}','${datos.nit}','${datos.correo}','${datos.telefono}','${datos.direccion}','${datos.imagen}')`;
            const resultSet = await this.sqlServerLib.executeSqlAsync(sql);
            return resultSet;
          }
          async crearVenta({datos}){
           console.log(datos);
-           let sql=` INSERT INTO VENTA VALUES ('${datos.fecha}','${datos.precio}','${datos.descripcion}','${datos.cantidad}','${datos.codigo}')`;
+           let sql=` INSERT INTO VENTA (fecha,precio,descripcion,cantidad,codigo) VALUES ('${datos.fecha}','${datos.precio}','${datos.descripcion}','${datos.cantidad}','${datos.codigo}')`;
            const resultSet = await this.sqlServerLib.executeSqlAsync(sql);
            return resultSet;
          }
    
       async editarProducto({datos}) {
         console.log(datos)
-        let sql = `UPDATE [dbo].[producto] SET  nombre='${datos.nombre}',marca='${datos.marca}',preciocompra='${datos.preciocompra}',categoria='${datos.categoria}',precioventa='${datos.precioventa}',descripcion='${datos.descripcion}',cantidad='${datos.cantidad}',imagen='${datos.imagen}'`;
+        let sql = `UPDATE producto SET  nombre='${datos.nombre}',marca='${datos.marca}',preciocompra='${datos.preciocompra}',categoria='${datos.categoria}',precioventa='${datos.precioventa}',descripcion='${datos.descripcion}',cantidad='${datos.cantidad}',imagen='${datos.imagen}'`;
         sql += ` WHERE id='${datos.id}'`;
         const resultSet = await this.sqlServerLib.executeSqlAsync(sql);
         return resultSet;
@@ -189,7 +194,7 @@ return resultSet[0];
      
       async editarCategoria({datos}) {
         console.log(datos)
-        let sql = `UPDATE [dbo].[categorias] SET  nombre='${datos.nombre}',descripcion='${datos.descripcion}'`;
+        let sql = `UPDATE categorias SET  nombre='${datos.nombre}',descripcion='${datos.descripcion}'`;
         sql += ` WHERE id='${datos.id}'`;
         const resultSet = await this.sqlServerLib.executeSqlAsync(sql);
         return resultSet;
@@ -198,7 +203,7 @@ return resultSet[0];
     async consultarListaUsuarios() {
       let sql = `SELECT * FROM usuario`;
       const resultSet = await this.sqlServerLib.executeSqlAsync(sql);
-      return resultSet;
+      return resultSet.rows;
   }
 
 
@@ -206,45 +211,46 @@ return resultSet[0];
   async consultarListaProveedor() {
     let sql = `SELECT * FROM proveedor`;
     const resultSet = await this.sqlServerLib.executeSqlAsync(sql);
-    return resultSet;
+    return resultSet.rows;
 }
 
 async consultarListaEmpresa() {
   let sql = `SELECT * FROM empresa`;
   const resultSet = await this.sqlServerLib.executeSqlAsync(sql);
-  return resultSet;
+  return resultSet.rows;
 }
 async consultarListaVentas() {
   let sql = `SELECT * FROM venta`;
   const resultSet = await this.sqlServerLib.executeSqlAsync(sql);
-  return resultSet;
+  return resultSet.rows;
 }
 async consultarListaCategorias() {
   let sql = `SELECT * FROM categorias`;
   const resultSet = await this.sqlServerLib.executeSqlAsync(sql);
-  return resultSet;
+  return resultSet.rows;
 }
 
 async consultarListaMarcas() {
   let sql = `SELECT * FROM marca`;
   const resultSet = await this.sqlServerLib.executeSqlAsync(sql);
-  return resultSet;
+  return resultSet.rows;
 }
+
 async consultarcategorias() {
-  let sql = `select nombre from categorias where estado = '1'`;
+  let sql = `SELECT id, nombre from categorias`;
   const resultSet = await this.sqlServerLib.executeSqlAsync(sql);
-  return resultSet;
+  return resultSet.rows;
 }
 
 async consultarmarca() {
   let sql = `select * from marca`;
   const resultSet = await this.sqlServerLib.executeSqlAsync(sql);
-  return resultSet;
+  return resultSet.rows;
 }
 async consultarProductos() {
-  let sql = `SELECT * FROM producto`;
+  let sql = `select * from producto`;
   const resultSet = await this.sqlServerLib.executeSqlAsync(sql);
-  return resultSet;
+  return resultSet.rows;
 }
 
 
@@ -257,19 +263,20 @@ async consultarProductos() {
 }
 */
 async consultarListaProductos() {
-  let sql = `SELECT p.id, p.nombre, p.marca, p.preciocompra, p.precioventa, p.descripcion, p.cantidad, p.codigo, p.imagen, p.categoria, c.nombre as nombreCategoria FROM producto p, categorias c
+  let sql = `SELECT p.id, p.nombre, p.marca, p.preciocompra, p.categoria, p.precioventa, p.descripcion, p.cantidad, p.codigo, p.imagen,  c.nombre as nombreCategoria FROM producto p, categorias c
   WHERE p.categoria = c.id`;
   const resultSet = await this.sqlServerLib.executeSqlAsync(sql);
-  return resultSet;
+  return resultSet.rows;
 }
+/*
 async consultarListaProductos() {
   let sql = `SELECT * FROM producto`;
   const resultSet = await this.sqlServerLib.executeSqlAsync(sql);
   return resultSet;
-}
+}*/
 async eliminarUsuarioVendedor({datos}) {
   console.log(datos)
-    let sql = `DELETE FROM [dbo].[usuario] WHERE id ='${datos.id}'`;
+    let sql = `DELETE FROM usuario WHERE id ='${datos.id}'`;
  
     return await this.sqlServerLib.executeSqlAsync(sql);
 }
@@ -277,43 +284,43 @@ async eliminarUsuarioVendedor({datos}) {
   
 async eliminarProducto({datos}) {
   console.log(datos)
-    let sql = `DELETE FROM [dbo].[producto] WHERE id ='${datos.id}'`;
+    let sql = `DELETE FROM producto WHERE id ='${datos.id}'`;
     return await this.sqlServerLib.executeSqlAsync(sql);
 }
 
 async eliminarEmpresa({datos}) {
   console.log(datos)
-    let sql = `DELETE FROM [dbo].[empresa] WHERE id ='${datos.id}'`;
+    let sql = `DELETE FROM  empresa WHERE id ='${datos.id}'`;
     return await this.sqlServerLib.executeSqlAsync(sql);
 }
 
 async eliminarCategoria({datos}) {
   console.log(datos)
-    let sql = `DELETE FROM [dbo].[categorias] WHERE id ='${datos.id}'`;
+    let sql = `DELETE FROM  categorias WHERE id ='${datos.id}'`;
     return await this.sqlServerLib.executeSqlAsync(sql);
 }
 
 async eliminarMarca({datos}) {
   console.log(datos)
-    let sql = `DELETE FROM [dbo].[marca] WHERE id ='${datos.id}'`;
+    let sql = `DELETE FROM marca WHERE id ='${datos.id}'`;
     return await this.sqlServerLib.executeSqlAsync(sql);
 }
 async eliminarUsuarioProveedor({datos}) {
   console.log(datos)
-    let sql = `DELETE FROM [dbo].[proveedor] WHERE id ='${datos.id}'`;
+    let sql = `DELETE FROM proveedor WHERE id ='${datos.id}'`;
  
     return await this.sqlServerLib.executeSqlAsync(sql);
 }
 async editarusuariovendedor({datos}) {
   console.log(datos)
-  let sql = `UPDATE [dbo].[usuario] SET  nombre='${datos.nombre}', apellido='${datos.apellido}',telefono='${datos.telefono}',correo='${datos.correo}',estado='${datos.estado}'`;
+  let sql = `UPDATE  usuario SET  nombre='${datos.nombre}', apellido='${datos.apellido}',telefono='${datos.telefono}',correo='${datos.correo}',estado='${datos.estado}'`;
   sql += ` WHERE id='${datos.id}'`;
   const resultSet = await this.sqlServerLib.executeSqlAsync(sql);
   return resultSet;
 }
 async editarProveedor({datos}) {
   console.log(datos)
-  let sql = `UPDATE [dbo].[proveedor] SET  nombre='${datos.nombre}',direccion='${datos.direccion}',apellido='${datos.apellido}',telefono='${datos.telefono}',correo='${datos.correo}',empresa='${datos.empresa}' `;
+  let sql = `UPDATE proveedor SET  nombre='${datos.nombre}',direccion='${datos.direccion}',apellido='${datos.apellido}',telefono='${datos.telefono}',correo='${datos.correo}',empresa='${datos.empresa}' `;
   sql += ` WHERE id='${datos.id}'`;
   const resultSet = await this.sqlServerLib.executeSqlAsync(sql);
   return resultSet;
@@ -323,7 +330,7 @@ async editarProveedor({datos}) {
 
 async editarUsuario({datos}) {
   console.log(datos)
-  let sql = `UPDATE [dbo].[usuario] SET  nombre='${datos.nombre}',apellido='${datos.apellido}',telefono='${datos.telefono}',correo='${datos.correo}',estado='${datos.estado}'`;
+  let sql = `UPDATE usuario  SET  nombre='${datos.nombre}',apellido='${datos.apellido}',telefono='${datos.telefono}',correo='${datos.correo}',estado='${datos.estado}'`;
   sql += ` WHERE id='${datos.id}'`;
   const resultSet = await this.sqlServerLib.executeSqlAsync(sql);
   return resultSet;
@@ -331,29 +338,30 @@ async editarUsuario({datos}) {
 
 async editarMarca({datos}) {
   console.log(datos)
-  let sql = `UPDATE [dbo].[marca] SET  nombre='${datos.nombre}',descripcion='${datos.descripcion}',imagen='${datos.imagen}',estado='${datos.estado}'`;
+  let sql = `UPDATE marca SET  nombre='${datos.nombre}',descripcion='${datos.descripcion}',imagen='${datos.imagen}',estado='${datos.estado}'`;
   sql += ` WHERE id='${datos.id}'`;
   const resultSet = await this.sqlServerLib.executeSqlAsync(sql);
-  return resultSet;
+  return resultSet.rows;
 }
 
 
 async actualizarEstadoUsuario({datos}) {
-  let sql = `UPDATE [dbo].[usuario] SET estado='${datos.estado}' `;
+  console.log(datos)
+  let sql = `UPDATE usuario SET estado=${datos.estado}`;
       sql += ` WHERE id='${datos.id}'`;
   const resultSet = await this.sqlServerLib.executeSqlAsync(sql);
   return resultSet;
 }
 
 async actualizarEstadoMarca({datos}) {
-  let sql = `UPDATE [dbo].[marca] SET estado='${datos.estado}' `;
+  let sql = `UPDATE marca SET estado='${datos.estado}' `;
       sql += ` WHERE id='${datos.id}'`;
   const resultSet = await this.sqlServerLib.executeSqlAsync(sql);
   return resultSet;
 }
 
 async actualizarEstadoCategoria({datos}) {
-  let sql = `UPDATE [dbo].[categorias] SET estado='${datos.estado}' `;
+  let sql = `UPDATE categorias SET estado='${datos.estado}' `;
       sql += ` WHERE id='${datos.id}'`;
   const resultSet = await this.sqlServerLib.executeSqlAsync(sql);
   return resultSet;
@@ -362,7 +370,7 @@ actuali
 async consultaIdproducto() {
   let sql = `SELECt id,nombre from producto`;
   const resultSet = await this.sqlServerLib.executeSqlAsync(sql);
-  return resultSet;
+  return resultSet.rows;
 }
 }
 
