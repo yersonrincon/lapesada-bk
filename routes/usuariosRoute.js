@@ -1,7 +1,8 @@
 const express = require("express");
 const UsuariosService = require("../services/usuariosService");
 const emailer = require('..//config/mailer');
-
+const { config } = require("../config");
+const jwt = require("jsonwebtoken");
 
 const usuariosApi = (app) => {
 
@@ -11,35 +12,102 @@ const usuariosApi = (app) => {
 
     router.post('/crearProveedor',
     async function(req,res, next){
-
         const{ body :datos} =req;
-        let datosInsertados = await usuariosService.crearProveedor({datos});
+        let datosInsertados = await usuariosService.buscarProveedor({datos});
+        if( datosInsertados.length > 0){  
+            return res.status(200).json({
+                ok: false,
+                message: ` EL proveedor ${datos.correo} ya se encuetra registrado `
+            });
+        }
+        else{
+        const{ body :datos} =req;
+        let crearProveedor= await usuariosService.crearProveedor({datos});
         return res.status(200).json({
             ok: true,
-            message: `Provedore creado .`
+            message: `Provedor creado`
+        });
+    }
+    });
+    router.post('/crearProducto',
+    async function(req,res, next){
+        const{ body :datos} =req;
+        
+        let datosInsertados = await usuariosService.buscarProducto({datos});
+        if( datosInsertados.length > 0){  
+        return res.status(200).json({
+            ok: false,
+            message: ` EL codigo del producto  ${datos.codigo} ya se encuetra registrado  .`
+        }); 
+       } else {
+            let crearproducto = await usuariosService.crearProducto({ datos });
+            return res.status(200).json({
+                ok: true,
+                message: `producto creado.`
+            });
+            }
+            });
+    router.post('/crearRol',
+    async function(req,res, next){
+        const{ body :datos} =req;
+        let datosInsertados = await usuariosService.consultaRol({datos});
+        if( datosInsertados.length > 0){  
+        return res.status(200).json({
+            ok: false,
+            message: ` el rol  ${datos.nombre} ya se encuetra registrado`
+        }); 
+       } else {
+            let crearproducto = await usuariosService.crearRol({ datos });
+            return res.status(200).json({
+                ok: true,
+                message: `Rol creado`
+            });
+            }
+            });
+ 
+    router.post('/crearclientealmacen',
+    async function(req,res, next){
+
+        const{ body :datos} =req;
+        let datosInsertados = await usuariosService.crearclientealmacen({datos});
+        return res.status(200).json({
+            ok: true,
+            message: `Cliete creado creado .`
         });
     });
     router.post('/crearCategoria',
-    async function(req,res, next){
+    
 
-        const{ body :datos} =req;
-        let datosInsertados = await usuariosService.crearCategoria({datos});
-        return res.status(200).json({
-            ok: true,
-            message: `categoria creada .`
-        }); 
-    });
+            async function(req,res, next){
 
+                const{ body :datos} =req;
+                let datosInsertados = await usuariosService.crearCategoria({datos});
+                return res.status(200).json({
+                    ok: true,
+                    message: `Categoria creada .`
+                });
+            });
+          
+
+    
     router.post('/crearMarca',
     async function(req,res, next){
-
         const{ body :datos} =req;
-        let datosInsertados = await usuariosService.crearMarca({datos});
+        
+        let datosInsertados = await usuariosService.buscarMarca({datos});
+        if( datosInsertados.length > 0){  
         return res.status(200).json({
-            ok: true,
-            message: `marca creada .`
+            ok: false,
+            message: ` la marca  ${datos.nombre} ya se encuetra registrada`
         }); 
-    });
+       } else {
+            let crearproducto = await usuariosService.crearMarca({ datos });
+            return res.status(200).json({
+                ok: true,
+                message: `Marca creada.`
+            });
+            }
+            });
    
     router.post('/crearEmpresa',
     async function(req,res, next){
@@ -89,8 +157,6 @@ const usuariosApi = (app) => {
             } 
             else {
             let crear = await usuariosService.crearUsuario({ datos });
-       
-           emailer.sendMail(datos)
        
             return res.status(200).json({
                 ok: true,
@@ -193,42 +259,78 @@ const usuariosApi = (app) => {
     router.post('/loginUsuario',
      
     async function(req, res, next){
-      const{body: datos}=req;
-      let datosLogin = await usuariosService.login({ datos });
-    
-      if(!datosLogin){
+      const {body: datos}=req;
+
+      let datosLogin = await usuariosService.loginUsuario({ datos });
+
+      if(datosLogin){
+        let estado = await usuariosService.consultarEstado({datosLogin});    
+        if(estado.estado == false){
+         return res.status(200).json({
+             ok: false,
+             message: `usuario  esta inactivo.`        
+         });
+           
+         } else {   
+             
+      let consultarUsuarioDB = await usuariosService.consultaUsuarioToken({datosLogin});
+         console.log('consultarUsuarioDB',consultarUsuarioDB,config.authJwtSecret);
+ 
+         const { id, nombre, apellido, telefono, correo, estado, roles } = consultarUsuarioDB;
+ 
+         const payload = { id, nombre, apellido, telefono, correo, estado, roles };
+ 
+         const token = jwt.sign(payload, config.authJwtSecret, {
+             expiresIn: config.expiresIn,
+         });
+             return res.status(200).json({
+                 ok: true,
+                 roles,
+                 token,
+                 message: `Login  exitoso.`                  
+             });    
+     }      
+        
+      }
+     else {
         return res.status(200).json({
             ok: false,
             message: `el correo o la contraseña no son correctas.`           
           
-        });      
-        
-    } else {
-        let estado = await usuariosService.consultarEstado({datos});    
-       if(estado.estado == false){
-        return res.status(200).json({
-            ok: false,
-            message: `usuario  esta inactivo.`        
         });
-          
-        } else {           
+        }
+    }
+    );
+    /*router.post('/loginUsuario',
+    async function(req, res, next) {
+        const { body: datos } = req;
+
+        let [usuario] = await usuariosService.loginUsuario({ datos });
+        if (usuario) {
+            const payload = { idusuario: usuario.idusuario, nombre: usuario.nombre, usuario: usuario.usuario, idrol: usuario.idrol };
+            const token = jwt.sign(payload, config.authJwtSecret, {
+                expiresIn: config.expiresIn,
+            });
             return res.status(200).json({
                 ok: true,
-                message: `Login  exitoso.`                  
-            });    
-    }
-        
-    }}
-    );
- 
-    router.post('/loginCliente',
+                token,
+                message: `Bienvenido.`
+            });
+        } else {
+            return res.status(200).json({
+                ok: false,
+                message: `Acceso denegado.`
+            });
+        }
+    });*/
+    router.post('/logincliente',
      
     async function(req, res, next){
       const{body: datos}=req;
       console.log(datos)
       let datosLogin = await usuariosService.logincliente({datos});
 
-     console.log('inportante este es el token ',token);
+    // console.log('inportante este es el token ',token);
       if(!datosLogin){
         return res.status(200).json({
             ok: false,
@@ -265,8 +367,8 @@ const usuariosApi = (app) => {
     }else { 
         let claveNueva = await ramdon();
         console.log('claveNueva',claveNueva);
-        let crear = await usuariosService.CrearEditarUsuarioVendedor(datos, claveNueva);
-        emailer.sendMail(datos,claveNueva);    
+        let crear = await usuariosService.CrearEditarUsuarioVendedor(datos,/* claveNueva*/);
+        emailer.sendMail(datos);    
         return res.status(200).json({     
         ok: true,
         message: `Usuario creado hemos enviado al correo la informacion del usuario.`
@@ -274,6 +376,20 @@ const usuariosApi = (app) => {
      });
     }
     });
+
+
+    router.post('/crearCotizacion',
+    async function(req,res, next){
+
+        const{ body :datos} =req;
+        let datosInsertados = await usuariosService.crearCotizacion({datos});
+        emailer.sendMailCotizacion(datos);   
+        return res.status(200).json({
+            ok: true,
+            message: `Cotizacion enviada`
+        });
+    });
+
 
     const ramdon = ()=>{
       
@@ -340,6 +456,17 @@ const usuariosApi = (app) => {
             message: `hemos editado el registro.`
         });
     });
+    router.post('/editarRoles',
+async function(req,res, next){
+     
+    const{ body :datos} =req;
+    let datosInsertados = await usuariosService.editarRoles({datos});
+    return res.status(200).json({
+        ok: true,
+        message: `hemos editado el registro.`
+    });
+});
+ 
  
     router.post('/actualizarEstadoUsuario',
     async function(req,res, next){
@@ -365,17 +492,18 @@ const usuariosApi = (app) => {
 
     router.post('/editarProducto',
     async function(req,res, next){
-
-        const{ body :datos} =req;
-        let datosInsertados = await usuariosService.editarProducto({datos});
-        return res.status(200).json({
-            ok: true,
-            message: `hemos editado el registro.`
+        
+            const{ body :datos} =req;
+            let datosInsertados = await usuariosService.editarProducto({datos});
+            return res.status(200).json({
+                ok: true,
+                message: `hemos editado el registro.`
+            });
         });
-    });
+         
     router.post('/editarMarca',
     async function(req,res, next){
-
+        
         const{ body :datos} =req;
         let datosInsertados = await usuariosService.editarMarca({datos});
         return res.status(200).json({
@@ -388,12 +516,21 @@ const usuariosApi = (app) => {
 
         const{ body :datos} =req;
         let datosInsertados = await usuariosService.editarUsuario({datos});
+        
         return res.status(200).json({
             ok: true,
             message: `hemos editado el registro.`
         });
     });
  
+
+
+
+
+
+
+
+
     router.post('/editarCategoria',
     async function(req,res, next){
 
@@ -404,6 +541,80 @@ const usuariosApi = (app) => {
             message: `hemos editado el registro.`
         });
     });
+    
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+ 
+
+
+    router.post('/editarEmpresa',
+  
+    async function(req,res, next){
+
+        const{ body :datos} =req;
+        let datosInsertados = await usuariosService.editarEmpresa({datos});
+        return res.status(200).json({
+            ok: true,
+            message: `hemos editado el registro.`
+        });
+    });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     router.post('/consultarcategorias',
  
@@ -416,7 +627,68 @@ const usuariosApi = (app) => {
             categorias
         });
     });
-   
+
+    
+    router.post('/validarCorreoGmail',
+ 
+    async function(req, res, next) {
+
+        const { body :datos} =req;
+
+        let datoscorreovalidar  = await usuariosService.validarCorreoGmail(datos);
+        
+        if(datoscorreovalidar){
+            return res.status(200).json({
+                ok: true,
+                message: `datos.`,
+                datoscorreovalidar
+            });
+        } else {
+            return res.status(200).json({
+                ok: false,
+                message: `Para poder iniciar sesión debe comunicarse a través de la línea telefónica .`,
+                datoscorreovalidar
+            });
+        }
+        
+    })
+
+
+    
+    router.post('/consultarclientes',
+ 
+    async function(req, res, next) {
+        let clientes  = await usuariosService.consultarcategorias();
+        console.log(clientes);
+        return res.status(200).json({
+            ok: true,
+            message: `datos.`,
+            clientes
+        });
+    });
+ 
+    router.post('/consultarroles',
+ 
+    async function(req, res, next) {
+        let roles  = await usuariosService.consultarroles();
+        console.log(roles);
+        return res.status(200).json({
+            ok: true,
+            message: `datos.`,
+            roles
+        });
+    });
+    router.post('/consultarClientealmacen',
+ 
+    async function(req, res, next) {
+        let   datosInsertados  = await usuariosService.consultarClientealmacen();
+     
+        return res.status(200).json({
+            ok: true,
+            message: `datos.`,
+            datosInsertados
+        });
+    });
     router.post('/consultarmarca',
  
     async function(req, res, next) {
@@ -428,10 +700,23 @@ const usuariosApi = (app) => {
             marca
         });
     });
-    router.post('/consultarListaImagenes',
+    
+    router.post('/consultarListaCotizaciones',
  
     async function(req, res, next) {
-        let datosInsertados  = await usuariosService.consultarListaImagenes();
+        let datosInsertados  = await usuariosService.consultarListaCotizaciones();
+   
+        return res.status(200).json({
+            ok: true,
+            datosInsertados,
+            message: `datos.`,
+           
+        });
+    });
+    router.post('/consultarListaEmpresa',
+ 
+    async function(req, res, next) {
+        let datosInsertados  = await usuariosService.consultarListaEmpresa();
         return res.status(200).json({
             ok: true,
             datosInsertados,
@@ -440,7 +725,18 @@ const usuariosApi = (app) => {
         });
     });
 
-
+    
+    router.post('/consultarListasCotizaciones',
+ 
+    async function(req, res, next) {
+        let datosInsertados  = await usuariosService.consultarListasCotizaciones();
+        return res.status(200).json({
+            ok: true,
+            datosInsertados,
+            message: `datos.`,
+          
+        });
+    });
     router.post('/consultarListaVentas',
  
     async function(req, res, next) {
@@ -492,6 +788,19 @@ const usuariosApi = (app) => {
    }
    );
 
+   router.post('/eliminarClientealmacen',
+   async function(req, res, next) {
+       const{body: datos }=req;
+     //  console.log('datos',datos);
+      let  eliminarClientealmac = await usuariosService.eliminarClientealmacen({datos});
+  
+      return res.status(200).json({
+      
+       ok: true,      
+       message: ` categoria eliminado.`
+   });
+  }
+  );
    router.post('/eliminarMarca',
    async function(req, res, next) {
        const{body: datos }=req;
@@ -517,6 +826,17 @@ const usuariosApi = (app) => {
       });
   });
 
+  router.post('/consultarListaroles',
+ 
+  async function(req, res, next) {
+      const{body: datos}=req;
+      let datosInsertados  = await usuariosService.consultarListaroles({datos});
+      return res.status(200).json({
+          ok: true,
+          datosInsertados,
+          message: `datos.`
+      });
+  });
   router.post('/consultarListaProductos',
  
   async function(req, res, next) {
@@ -568,7 +888,7 @@ const usuariosApi = (app) => {
  async function(req, res, next) {
      const{body: datos }=req;
      console.log('datos',datos);
-    let  eliminarUsuarioVendedor = await usuariosService.eliminarUsuarioProveedor({datos});
+    let  eliminarProveedor = await usuariosService.eliminarUsuarioProveedor({datos});
 
     return res.status(200).json({
      ok: true,      
@@ -582,7 +902,7 @@ router.post('/eliminarProducto',
  async function(req, res, next) {
      const{body: datos }=req;
    //  console.log('datos',datos);
-    let  eliminarUsuarioVendedor = await usuariosService.eliminarProducto({datos});
+    let  eliminarproducto = await usuariosService.eliminarProducto({datos});
 
     return res.status(200).json({
     
@@ -605,7 +925,20 @@ router.post('/eliminarEmpresa',
  });
 }
 );
-  
+
+router.post('/eliminarUsuarioRol',
+ async function(req, res, next) {
+     const{body: datos }=req;
+   //  console.log('datos',datos);
+    let  eliminarroles = await usuariosService.eliminarUsuarioRol({datos});
+
+    return res.status(200).json({
+    
+     ok: true,      
+     message: `rol eliminado.`
+ });
+}
+);
 
     router.post('/actualizarEstadoUsuario',
     async function(req,res, next){
@@ -617,7 +950,18 @@ router.post('/eliminarEmpresa',
             message: `ESTADO ACTUALIZADO.`
         });
     });
+ 
+    router.post('/actualizarEstadoRol',
+    async function(req,res, next){
 
+        const{ body :datos} =req;
+        let datosInsertados = await usuariosService.actualizarEstadoRol({datos});
+        return res.status(200).json({
+            ok: true,
+            message: `ESTADO ACTUALIZADO.`
+        });
+    });
+    
     router.post('/actualizarEstadoMarca',
     async function(req,res, next){
 

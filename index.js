@@ -1,4 +1,5 @@
 const express = require('express');
+const app = express();
 const { variables } = require("./config");
 const bodyParser = require('body-parser');
 const usuariosApi =  require('./routes/usuariosRoute');
@@ -9,7 +10,7 @@ const cookieParser = require('cookie-parser'); // ojo
 const session = require('express-session'); // ojo
 const MemoryStore = require('memorystore')(session); // ojo
 const morgan = require('morgan');
-const app = express();
+
 const config = require('./config/index');
 const chalk = require('chalk');
 chalk.level = 3;
