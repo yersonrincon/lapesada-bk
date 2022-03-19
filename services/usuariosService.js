@@ -184,7 +184,7 @@ async consultaUsuarioToken({datosLogin}) {
     async CrearEditarUsuarioVendedor(datos, claveNueva){
       console.log(datos,/*claveNueva */);
      // const password = await bcrypt.hash(claveNueva, 10);
-      let sql=` INSERT INTO usuario (nombre,apellido,telefono,correo,roles,estado) VALUES ('${datos.nombre}','${datos.apellido}','${datos.telefono}','${datos.correo}','${datos.roles}','${datos.estado}')`;   
+      let sql=` INSERT INTO usuario (nombre,apellido,telefono,correo,roles,estado) VALUES ('${datos.nombre}','${datos.apellido}','${datos.telefono}','${datos.correo}','${datos.roles}',true)`;   
       const resultSet = await this.sqlServerLib.executeSqlAsync(sql);
       return resultSet.rows;
     }
@@ -445,7 +445,7 @@ async editarRoles({datos}) {
 
 async editarUsuario({datos}) {
   console.log(datos)
-  let sql = `UPDATE usuario  SET  nombre='${datos.nombre}',apellido='${datos.apellido}',telefono='${datos.telefono}',correo='${datos.correo}',roles='${datos.roles}',estado='${datos.estado}'`;
+  let sql = `UPDATE usuario  SET  nombre='${datos.nombre}',apellido='${datos.apellido}',telefono='${datos.telefono}',correo='${datos.correo}',roles='${datos.roles}'`;
   sql += ` WHERE id='${datos.id}'`;
   const resultSet = await this.sqlServerLib.executeSqlAsync(sql);
   return resultSet.rows;
@@ -453,7 +453,7 @@ async editarUsuario({datos}) {
 
 async editarMarca({datos}) {
   console.log(datos)
-  let sql = `UPDATE marca SET  nombre='${datos.nombre}',descripcion='${datos.descripcion}',estado='${datos.estado}'`;
+  let sql = `UPDATE marca SET  nombre='${datos.nombre}',descripcion='${datos.descripcion}'`;
   sql += ` WHERE id='${datos.id}'`;
   const resultSet = await this.sqlServerLib.executeSqlAsync(sql);
   return resultSet.rows;
