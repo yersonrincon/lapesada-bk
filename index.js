@@ -41,10 +41,10 @@ app.use((req, res, next) => {
         "http://localhost:4200",
         "http://localhost:4201",
         "http://localhost:8444",
-       // "https://lapesada.herokuapp.com",
-      //  "https://lapesada.herokuapp.com/",
-      //  "https://git.heroku.com/lapesada.git"
-      "https://lapesadaempresa.herokuapp.com/"
+        "https://lapesada.herokuapp.com",
+        "https://lapesada.herokuapp.com/",
+        "https://git.heroku.com/lapesada.git"
+       
     ];
 
     let origin = req.headers.origin;
