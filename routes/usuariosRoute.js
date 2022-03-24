@@ -3,6 +3,10 @@ const UsuariosService = require("../services/usuariosService");
 const emailer = require('..//config/mailer');
 const { config } = require("../config");
 const jwt = require("jsonwebtoken");
+const path = require('path');
+const app = express();
+const fileUpload = require('express-fileupload');
+app.use(fileUpload());
 
 const usuariosApi = (app) => {
 
@@ -275,10 +279,10 @@ const usuariosApi = (app) => {
              
       let consultarUsuarioDB = await usuariosService.consultaUsuarioToken({datosLogin});
          console.log('consultarUsuarioDB',consultarUsuarioDB,config.authJwtSecret);
+         console.log('consultarUsuarioDB',consultarUsuarioDB);
+         const { id, nombre, apellido, telefono, correo, estado, roles, nombrerol } = consultarUsuarioDB;
  
-         const { id, nombre, apellido, telefono, correo, estado, roles } = consultarUsuarioDB;
- 
-         const payload = { id, nombre, apellido, telefono, correo, estado, roles };
+         const payload = { id, nombre, apellido, telefono, correo, estado, roles, nombrerol };
  
          const token = jwt.sign(payload, config.authJwtSecret, {
              expiresIn: config.expiresIn,
@@ -456,6 +460,11 @@ const usuariosApi = (app) => {
             message: `hemos editado el registro.`
         });
     });
+
+
+
+
+
     router.post('/editarRoles',
 async function(req,res, next){
      
@@ -501,16 +510,47 @@ async function(req,res, next){
             });
         });
          
+ 
+
     router.post('/editarMarca',
     async function(req,res, next){
-        
         const{ body :datos} =req;
-        let datosInsertados = await usuariosService.editarMarca({datos});
+        
+        let datosInsertados = await usuariosService.buscarMarca({datos});
+        if( datosInsertados.length > 0){  
+            
         return res.status(200).json({
-            ok: true,
-            message: `hemos editado el registro.`
-        });
-    });
+            ok: false,
+            message: ` la marca  ${datos.nombre} ya se encuetra registrada`
+        }); 
+       } else {
+            let crearproducto = await usuariosService.editarMarca({ datos });
+            return res.status(200).json({
+                ok: true,
+                message: `hemos editado el registro`
+            });
+            }
+            });
+
+            router.post('/crearMarca',
+            async function(req,res, next){
+                const{ body :datos} =req;
+                
+                let datosInsertados = await usuariosService.buscarMarca({datos});
+                if( datosInsertados.length > 0){  
+                return res.status(200).json({
+                    ok: false,
+                    message: ` la marca  ${datos.nombre} ya se encuetra registrada`
+                }); 
+               } else {
+                    let crearproducto = await usuariosService.crearMarca({ datos });
+                    return res.status(200).json({
+                        ok: true,
+                        message: `Marca creada.`
+                    });
+                    }
+                    });
+           
     router.post('/editarUsuario',
     async function(req,res, next){
 
@@ -646,7 +686,7 @@ async function(req,res, next){
         } else {
             return res.status(200).json({
                 ok: false,
-                message: `Para poder iniciar sesión debe comunicarse a través de la línea telefónica .`,
+                message: `Para poder iniciar sesión debe comunicarse a través  de nuestra línea telefónica .`,
                 datoscorreovalidar
             });
         }
@@ -860,6 +900,41 @@ async function(req,res, next){
      });
  });
 
+ router.post('/consultarCantidad',
+ async function(req, res, next) {
+     const{body: datos}=req;
+     let cantidad  = await usuariosService.consultarCantidad({datos});
+     return res.status(200).json({
+         ok: true,
+         cantidad,
+         message: `datos.`
+     });
+ });
+
+
+ router.post('/consultarCantidadventas',
+ async function(req, res, next) {
+     const{body: datos}=req;
+     let ventas  = await usuariosService.consultarCantidadventas({datos});
+     return res.status(200).json({
+         ok: true,
+         ventas,
+         message: `datos.`
+     });
+ });
+
+
+ router.post('/consultarCantidadCotizaciones',
+ async function(req, res, next) {
+     const{body: datos}=req;
+     let cotizacion  = await usuariosService.consultarCantidadCotizaciones({datos});
+     return res.status(200).json({
+         ok: true,
+         cotizacion,
+         message: `datos.`
+     });
+ });
+
  router.post('/consultarListaMarcas',
  async function(req, res, next) {
      const{body: datos}=req;
@@ -940,6 +1015,20 @@ router.post('/eliminarUsuarioRol',
 }
 );
 
+router.post('/eliminarCotizacion',
+ async function(req, res, next) {
+     const{body: datos }=req;
+   //  console.log('datos',datos);
+    let  cotizacion = await usuariosService.eliminarCotizacion({datos});
+
+    return res.status(200).json({
+    
+     ok: true,      
+     message: `cotización eliminada `
+ });
+}
+);
+
     router.post('/actualizarEstadoUsuario',
     async function(req,res, next){
 
@@ -1006,6 +1095,55 @@ router.post('/eliminarUsuarioRol',
       });
   });
 
+  router.post('/cargar',
+  app.use(fileUpload()),
+  function(req, res) {
+
+      let correo = req.query.correo;
+
+      if (!req.files) {
+          return res.status(400).json({
+              ok: false,
+              message: 'No se ha seleccionado ningún archivo'
+          });
+      }
+      let archivo = req.files.archivo;
+      let nombreCortado = archivo.name.split('.');
+      let extension = nombreCortado[nombreCortado.length - 1];
+
+        console.log(archivo);
+        console.log(correo);
+        
+        let extensionesPermitidas = ['pdf'];
+
+      if (extensionesPermitidas.indexOf(extension) < 0) {
+          return res.status(200).json({
+              ok: false,
+              message: 'La extensión de los archivos debe ser .pdf'
+          });
+      }
+ 
+      filePath = path.resolve(__dirname, `../archivos`) + '/' + archivo.name;
+
+      archivo.mv(filePath, function(err) {
+          if (err) {
+              return res.status(500).json({
+                  ok: false,
+                  err
+              });
+          }
+
+
+         const respuesta = emailer.sendMailCotizacion(correo);   
+         console.log(respuesta);
+
+         
+          res.json({
+              ok: true,
+              message: 'Cotización enviada '
+          });
+      })
+  });
 
 };
 
