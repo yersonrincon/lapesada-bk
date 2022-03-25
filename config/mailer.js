@@ -418,12 +418,8 @@ a[x-apple-data-detectors] {
    </table> 
   </div>  
  </body>
-</html>`
+      </html>`
     });
-
-
-
-
     console.log("mesage sent: %s ",info.messageId);
     return info.messageId;
  } 
@@ -431,9 +427,9 @@ a[x-apple-data-detectors] {
    const transporter = createTrans ()
    const info = await transporter.sendMail({
      
-         from: '"cotizacion  " <yersonhernandez202@gmail.com>', // sender address
-         to: ``, // list of receivers
-         subject: `cotizacion`, // Subject line
+         from: '"cotizacion  "<yersonhernandez202@gmail.com>', // sender address
+         to: `${correo}`,
+         subject: `Cotización`, // Subject line
          attachments:[
           {
           name: 'cotizacion.pdf',

@@ -117,7 +117,7 @@ async consultarListaEmpresa() {
 
 
 async consultarListasCotizaciones() {
-  let sql = `SELECT * FROM producto`;
+  let sql = `SELECT * FROM producto ORDER BY ID ASC`;
   const resultSet = await this.sqlServerLib.executeSqlAsync(sql);
   return resultSet.rows;
 }  
@@ -208,15 +208,7 @@ async consultaUsuarioToken({datosLogin}) {
       const resultSet = await this.sqlServerLib.executeSqlAsync(sql);
       return resultSet.rows;
     }
-    async RecuperarPasswordCliente(datos, enlace){
-      console.log(datos, enlace );
-      const password = await bcrypt.hash(enlace, 10);cargarListaUsuarios 
-      let sql = `UPDATE cliente SET  password='${datos.enlace}'`;
-      sql += ` WHERE correo='${datos.correo}'`;
-      const resultSet = await this.sqlServerLib.executeSqlAsync(sql);
-      return resultSet;
-    }
-  
+
 
     async CrearEditarUsuarioProveedor({datos}){
       console.log(datos);
@@ -261,17 +253,19 @@ async consultaUsuarioToken({datosLogin}) {
          }
          async crearEmpresa({datos}){
           console.log(datos);
-           let sql=` INSERT INTO empresa(nombre,nit,correo,telefono,direccion,imagen) VALUES ('${datos.nombre}','${datos.nit}','${datos.correo}','${datos.telefono}','${datos.direccion}','${datos.imagen}')`;
+           let sql=`INSERT INTO empresa(nombre,nit,correo,telefono,direccion,imagen) VALUES ('${datos.nombre}','${datos.nit}','${datos.correo}','${datos.telefono}','${datos.direccion}','${datos.imagen}')`;
            const resultSet = await this.sqlServerLib.executeSqlAsync(sql);
            return resultSet;
          }
-         async crearVenta({datos}){
-          console.log(datos);
-           let sql=` INSERT INTO VENTA (precio,descripcion,cantidad,codigo) VALUES ('${datos.precio}','${datos.descripcion}','${datos.cantidad}','${datos.codigo}')`;
-           const resultSet = await this.sqlServerLib.executeSqlAsync(sql);
-           return resultSet;
-         }
+  
    
+         async editarVenta({datos}) {
+          console.log(datos)
+          let sql=`INSERT INTO VENTA (precioventa,cantidad,codigo,descripcion) VALUES ('${datos.precioventa}','${datos.cantidad}','${datos.codigo}','${datos.descripcion}')`;
+          const resultSet = await this.sqlServerLib.executeSqlAsync(sql);
+          return resultSet;
+        }
+        
       
       async editarProducto({datos}) {
         console.log(datos)
@@ -291,71 +285,71 @@ async consultaUsuarioToken({datosLogin}) {
 
       
     async consultarListaUsuarios() {
-      let sql = `  SELECT p.id, p.apellido, p.nombre, p.telefono, p.correo, p.roles ,p.estado ,c.nombre as nombreRoles FROM usuario p, roles c
-      WHERE p.roles = c.id`;
+      let sql = `select  nombre,precioventa,cantidad 
+      from  producto ORDER BY ID ASC`;
       const resultSet = await this.sqlServerLib.executeSqlAsync(sql);
       return resultSet.rows;
   }
 
   async consultarListaCotizaciones() {
-    let sql = `SELECT * FROM cotizacion`;
+    let sql = `SELECT * FROM cotizacion ORDER BY ID ASC`;
     const resultSet = await this.sqlServerLib.executeSqlAsync(sql);
     return resultSet.rows;
 }
   async consultarClientealmacen() {
-    let sql = `SELECT * FROM clientealmacen`;
+    let sql = `SELECT * FROM clientealmacen ORDER BY ID ASC`;
     const resultSet = await this.sqlServerLib.executeSqlAsync(sql);
     return resultSet.rows;
 }
      
   async consultarListaProveedor() {
-    let sql = `SELECT * FROM proveedor`;
+    let sql = `SELECT * FROM proveedor ORDER BY ID ASC`;
     const resultSet = await this.sqlServerLib.executeSqlAsync(sql);
     return resultSet.rows;
 }
 
 async consultarListaroles() {
-  let sql = `SELECT * FROM roles`;
+  let sql = `SELECT * FROM roles ORDER BY ID ASC`;
   const resultSet = await this.sqlServerLib.executeSqlAsync(sql);
   return resultSet.rows;
 }
 async consultarListaroles() {
-  let sql = `SELECT * FROM roles`;
+  let sql = `SELECT * FROM roles ORDER BY ID ASC`;
   const resultSet = await this.sqlServerLib.executeSqlAsync(sql);
   return resultSet.rows;
 }
 
 async consultarListaEmpresa() {
-  let sql = `SELECT * FROM empresa`;
+  let sql = `SELECT * FROM empresa ORDER BY ID ASC`;
   const resultSet = await this.sqlServerLib.executeSqlAsync(sql);
   return resultSet.rows;
 }
 
 async consultarListaVentas() {
-  let sql = `SELECT * FROM venta`;
+  let sql = `SELECT * FROM venta ORDER BY ID ASC`;
   const resultSet = await this.sqlServerLib.executeSqlAsync(sql);
   return resultSet.rows;
 }
 async consultarListaCategorias() {
-  let sql = `SELECT * FROM categorias`;
+  let sql = `SELECT * FROM categorias ORDER BY ID ASC`;
   const resultSet = await this.sqlServerLib.executeSqlAsync(sql);
   return resultSet.rows;
 }
 
 async consultarListaMarcas() {
-  let sql = `SELECT * FROM marca`;
+  let sql = `SELECT * FROM marca ORDER BY ID ASC`;
   const resultSet = await this.sqlServerLib.executeSqlAsync(sql);
   return resultSet.rows;
 }
 
 async consultarcategorias() {
-  let sql = `SELECT * from categorias `;
+  let sql = `SELECT id , nombre from categorias where estado =TRUE`;
   const resultSet = await this.sqlServerLib.executeSqlAsync(sql);
   return resultSet.rows;
 }
 
 async consultarroles() {
-  let sql = `SELECT * from roles `;
+  let sql = `SELECT * from roles ORDER BY ID ASC`;
   const resultSet = await this.sqlServerLib.executeSqlAsync(sql);
   return resultSet.rows;
 }
@@ -365,20 +359,18 @@ async consultarmarca() {
   return resultSet.rows;
 }
 async consultarProductos() {
-  let sql = `select * from producto`;
+  let sql = `select * from producto ORDER BY ID ASC`;
+  const resultSet = await this.sqlServerLib.executeSqlAsync(sql);
+  return resultSet.rows;
+}
+
+async consultarparacotizacion() {
+  let sql = `select * from producto ORDER BY ID ASC`;
   const resultSet = await this.sqlServerLib.executeSqlAsync(sql);
   return resultSet.rows;
 }
 
 
-
-
-/*async consultarListaCompras() {
-  let sql = `SELECT * FROM producto`;
-  const resultSet = await this.sqlServerLib.executeSqlAsync(sql);
-  return resultSet;
-}
-*/
 async consultarListaProductos() {
   let sql = `SELECT p.id, p.nombre, p.marca, m.nombre as nombreMarca, p.categoria, p.precioventa, p.descripcion, p.cantidad, p.codigo, p.imagen,  c.nombre as nombreCategoria 
   FROM producto p, categorias c, marca m
@@ -386,12 +378,7 @@ async consultarListaProductos() {
   const resultSet = await this.sqlServerLib.executeSqlAsync(sql);
   return resultSet.rows;
 }
-/*
-async consultarListaProductos() {
-  let sql = `SELECT * FROM producto`;
-  const resultSet = await this.sqlServerLib.executeSqlAsync(sql);
-  return resultSet;
-}*/
+
 async eliminarUsuarioVendedor({datos}) {
   console.log(datos)
     let sql = `DELETE FROM usuario WHERE id ='${datos.id}'`;
@@ -399,6 +386,11 @@ async eliminarUsuarioVendedor({datos}) {
     return await this.sqlServerLib.executeSqlAsync(sql);
 }
 
+async eliminarregistrocotizacion({datos}) {
+  console.log(datos)
+    let sql = `DELETE FROM cotizacion WHERE id ='${datos.id}'`;
+    return await this.sqlServerLib.executeSqlAsync(sql);
+}
 
 async eliminarClientealmacen({datos}) {
   console.log(datos)
@@ -471,6 +463,8 @@ async editarUsuario({datos}) {
   const resultSet = await this.sqlServerLib.executeSqlAsync(sql);
   return resultSet.rows;
 }
+
+
 
 async editarMarca({datos}) {
   console.log(datos)

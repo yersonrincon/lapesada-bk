@@ -5,6 +5,7 @@ const { config } = require("../config");
 const jwt = require("jsonwebtoken");
 const path = require('path');
 const app = express();
+const fs = require('fs')
 const fileUpload = require('express-fileupload');
 app.use(fileUpload());
 
@@ -369,8 +370,8 @@ const usuariosApi = (app) => {
             message:`El usuario ${datos.correo} se encuentra registrado.`
         });
     }else { 
-        let claveNueva = await ramdon();
-        console.log('claveNueva',claveNueva);
+       
+    
         let crear = await usuariosService.CrearEditarUsuarioVendedor(datos,/* claveNueva*/);
         emailer.sendMail(datos);    
         return res.status(200).json({     
@@ -394,17 +395,6 @@ const usuariosApi = (app) => {
         });
     });
 
-
-    const ramdon = ()=>{
-      
-        let contrasena = '';
-           let caracteres = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789@#$';           
-            for (let i = 1; i <= 8; i++) {
-                let char = Math.floor(Math.random() * caracteres.length + 1);                  
-                contrasena += caracteres.charAt(char)
-            }                 
-            return contrasena;           
-        }
         router.post('/loginpasswords',
         async function(req, res, next){
           const{body: datos}=req;
@@ -519,10 +509,7 @@ async function(req,res, next){
         let datosInsertados = await usuariosService.buscarMarca({datos});
         if( datosInsertados.length > 0){  
             
-        return res.status(200).json({
-            ok: false,
-            message: ` la marca  ${datos.nombre} ya se encuetra registrada`
-        }); 
+     
        } else {
             let crearproducto = await usuariosService.editarMarca({ datos });
             return res.status(200).json({
@@ -581,29 +568,21 @@ async function(req,res, next){
             message: `hemos editado el registro.`
         });
     });
-    
-
-
-    
 
 
 
+    router.post('/editarVenta',
+    async function(req,res, next){
 
+        const{ body :datos} =req;
+        let datosInsertados = await usuariosService.editarVenta({datos});
+        console.log(datos)
+        return res.status(200).json({
+            ok: true,
+            message: `hemos realizado la venta.`
+        });
+    });
 
-
-
-
-
-
-
-
-
-
-
-
-
-    
- 
 
 
     router.post('/editarEmpresa',
@@ -617,43 +596,6 @@ async function(req,res, next){
             message: `hemos editado el registro.`
         });
     });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
     router.post('/consultarcategorias',
@@ -886,6 +828,32 @@ async function(req,res, next){
           ok: true,
           datosInsertados,
           message: `datos.`
+      });
+  });
+  
+
+  router.post('/consultarparacotizacion',
+ 
+  async function(req, res, next) {
+      const{body: datos}=req;
+      let datosInsertados  = await usuariosService.consultarparacotizacion({datos});
+      return res.status(200).json({
+          ok: true,
+          datosInsertados,
+          message: `datos.`
+      });
+  });
+
+
+  router.post('/eliminarregistrocotizacion',
+ 
+  async function(req, res, next) {
+      const{body: datos}=req;
+      let datosInsertados  = await usuariosService.consultarparacotizacion({datos});
+      return res.status(200).json({
+          ok: true,
+          datosInsertados,
+          message: `cotización eliminada`
       });
   });
 
@@ -1133,10 +1101,17 @@ router.post('/eliminarCotizacion',
               });
           }
 
+          console.log('correo', correo);
 
          const respuesta = emailer.sendMailCotizacion(correo);   
          console.log(respuesta);
-
+         
+         setTimeout(function(){
+            fs.unlinkSync(`./archivos/${correo}.pdf`)
+                console.log('File removed')
+        }, 4000);
+         
+       
          
           res.json({
               ok: true,
