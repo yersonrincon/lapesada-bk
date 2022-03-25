@@ -903,6 +903,21 @@ async function(req,res, next){
      });
  });
 
+
+ router.post('/consultaralmacenes',
+
+ async function(req, res, next) {
+     const{body: datos}=req;
+     let almacen  = await usuariosService.consultaralmacenes({datos});
+     console.log ('respustada',datos)
+     return res.status(200).json({
+         ok: true,
+         almacen,
+         message: `datos.`
+     });
+ });
+
+
  router.post('/consultarListaMarcas',
  async function(req, res, next) {
      const{body: datos}=req;
@@ -1105,7 +1120,7 @@ router.post('/eliminarCotizacion',
 
          const respuesta = emailer.sendMailCotizacion(correo);   
          console.log(respuesta);
-         
+
          setTimeout(function(){
             fs.unlinkSync(`./archivos/${correo}.pdf`)
                 console.log('File removed')
