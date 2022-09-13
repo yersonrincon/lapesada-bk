@@ -1,6 +1,8 @@
 const express = require("express");
 const UsuariosService = require("../services/usuariosService");
 const emailer = require('..//config/mailer');
+const mensajeinicio = require('../config/mensajeinicio');
+const contizacion = require('../config/contizacion');
 const { config } = require("../config");
 const jwt = require("jsonwebtoken");
 const path = require('path');
@@ -373,7 +375,7 @@ const usuariosApi = (app) => {
        
     
         let crear = await usuariosService.CrearEditarUsuarioVendedor(datos,/* claveNueva*/);
-        emailer.sendMail(datos);    
+        mensajeinicio.sendMail(datos);    
         return res.status(200).json({     
         ok: true,
         message: `Usuario creado hemos enviado al correo la informacion del usuario.`
@@ -388,7 +390,7 @@ const usuariosApi = (app) => {
 
         const{ body :datos} =req;
         let datosInsertados = await usuariosService.crearCotizacion({datos});
-        emailer.sendMailCotizacion(datos);   
+        contizacion.sendMailCotizacion(datos);   
         return res.status(200).json({
             ok: true,
             message: `Cotizacion enviada`
