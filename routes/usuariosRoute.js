@@ -849,7 +849,7 @@ async function(req,res, next){
  
   async function(req, res, next) {
       const{body: datos}=req;
-      let datosInsertados  = await usuariosService.consultarparacotizacion({datos});
+      let datosInsertados  = await usuariosService.eliminarcotizacion({datos});
       return res.status(200).json({
           ok: true,
           datosInsertados,
@@ -959,7 +959,7 @@ async function(req,res, next){
 router.post('/eliminarProducto',
  async function(req, res, next) {
      const{body: datos }=req;
-   //  console.log('datos',datos);
+   
     let  eliminarproducto = await usuariosService.eliminarProducto({datos});
 
     return res.status(200).json({

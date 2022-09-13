@@ -418,12 +418,24 @@ async eliminarEmpresa({datos}) {
     let sql = `DELETE FROM  empresa WHERE id ='${datos.id}'`;
     return await this.sqlServerLib.executeSqlAsync(sql);
 }
+async eliminarcotizacion({datos}){
+  console.log(datos)
+  let sql = `DELETE FROM  cotizacion WHERE id ='${datos.id}'`;
+  return await this.sqlServerLib.executeSqlAsync(sql);
+}
+async consultarparacotizacion() {
+  let sql = `select * from producto ORDER BY ID ASC`;
+  const resultSet = await this.sqlServerLib.executeSqlAsync(sql);
+  return resultSet.rows;
+}
+
 
 async eliminarUsuarioRol({datos}) {
   console.log(datos)
     let sql = `DELETE FROM  roles WHERE id ='${datos.id}'`;
     return await this.sqlServerLib.executeSqlAsync(sql);
 }
+
 async eliminarCategoria({datos}) {
   console.log(datos)
     let sql = `DELETE FROM  categorias WHERE id ='${datos.id}'`;
