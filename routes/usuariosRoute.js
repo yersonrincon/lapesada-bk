@@ -2,6 +2,7 @@ const express = require("express");
 const UsuariosService = require("../services/usuariosService");
 const emailer = require('..//config/mailer');
 const mensajeinicio = require('../config/mensajeinicio');
+const cors= require ('cors')
 const contizacion = require('../config/contizacion');
 const { config } = require("../config");
 const jwt = require("jsonwebtoken");
@@ -9,6 +10,7 @@ const path = require('path');
 const app = express();
 const fs = require('fs')
 const fileUpload = require('express-fileupload');
+app.use(cors());
 app.use(fileUpload());
 
 const usuariosApi = (app) => {
