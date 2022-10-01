@@ -41,13 +41,11 @@ app.use( //OJO
 app.use((req, res, next) => {
     let allowedOrigins = [
         "http://localhost:4200",
-        "http://localhost:4200",
         "http://localhost:4201",
         "http://localhost:8444",
-        "https://lapesada.herokuapp.com",   
-        "https://lapesada.herokuapp.com/",   
-        "https://git.heroku.com/lapesada.git",
-        "https://lapesada.herokuapp.com/#/demoPages/pagina-inicio"
+        "https://lapesada.herokuapp.com",
+        "https://lapesada.herokuapp.com/",
+        "https://git.heroku.com/lapesada.git"
        
     ];
 
