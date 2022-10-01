@@ -57,7 +57,7 @@ app.use((req, res, next) => {
         log(chalk.bgRed.white(`origin includes`, origin))
         res.header("Access-Control-Allow-Origin", origin); // restrict it to the required domain
     } else {
-        console.log('no incluye el origen')
+        console.log('no incluye el origen', origin)
     }
 
 
