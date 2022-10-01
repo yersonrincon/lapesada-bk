@@ -55,13 +55,12 @@ app.use((req, res, next) => {
 
     if (allowedOrigins.includes(origin)) {
         log(chalk.bgRed.white(`origin includes`, origin))
-        res.header("Access-Control-Allow-Origin", origin); // restrict it to the required domain
+        res.header("Access-Control-Allow-Origin", '*'); // restrict it to the required domain
     }
 
 
     res.header(
         "Access-Control-Allow-Headers",
-        "Access-Control-Allow-Origin",
         "Origin, X-Requested-With, Content-Type, Accept, token, authorization, apiKeyToken, responseType, timeout, content-type"
     );
 
