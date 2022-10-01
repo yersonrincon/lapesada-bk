@@ -42,11 +42,13 @@ app.use((req, res, next) => {
     let allowedOrigins = [
         "http://localhost:4200",
         "http://localhost:4201",
+        "http://lapesada.herokuapp.com",
+        "https://lapesada.herokuapp.com",
         "http://localhost:8444",
         "https://lapesada.herokuapp.com",
         "https://lapesada.herokuapp.com/",
-        "https://git.heroku.com/lapesada.git"
-       
+        "https://git.heroku.com/lapesada.git",
+        "https://git.heroku.com/lapesada-bk.git"
     ];
 
     let origin = req.headers.origin;
