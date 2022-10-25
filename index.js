@@ -3,7 +3,7 @@ const app = express();
 //const cors = require ('cors');
 const { variables } = require("./config");
 const bodyParser = require('body-parser');
-const usuariosApi =  require('./routes/usuariosRoute');
+const usuariosApi = require('./routes/usuariosRoute');
 const passport = require('passport');
 const fs = require("fs");
 const https = require("https");
@@ -11,20 +11,17 @@ const cookieParser = require('cookie-parser'); // ojo
 const session = require('express-session'); // ojo
 const MemoryStore = require('memorystore')(session); // ojo
 const morgan = require('morgan');
-
 const config = require('./config/index');
 const chalk = require('chalk');
 chalk.level = 3;
 const log = console.log;
-
 // parse application/json
 //app.use(bodyParser.urlencoded({ extended: false }));
 //app.use(bodyParser.json());
 //app.use(cors());
-app.use(bodyParser.urlencoded({limit: '50mb', extended: true}));
-app.use(bodyParser.json({limit: '50mb',extended: true}));
+app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
+app.use(bodyParser.json({ limit: '50mb', extended: true }));
 app.use(morgan('dev'));
-
 app.use(cookieParser(process.env.DEFAULT_USER_COOKIE_PASS)); //OJO
 app.use( //OJO
     session({
@@ -48,7 +45,8 @@ app.use((req, res, next) => {
         "https://lapesada.herokuapp.com",
         "https://lapesada.herokuapp.com/",
         "https://git.heroku.com/lapesada.git",
-        "https://git.heroku.com/lapesada-bk.git"
+        "https://git.heroku.com/lapesada-bk.git",
+        "https://lapesada-bk.herokuapp.com/api/administrador/validarCorreoGmail",
     ];
 
     let origin = req.headers.origin;
@@ -60,23 +58,16 @@ app.use((req, res, next) => {
     } else {
         console.log('no incluye el origen', origin)
     }
-
-
     res.header(
         "Access-Control-Allow-Headers",
         "Origin, X-Requested-With, Content-Type, Accept, token, authorization, apiKeyToken, responseType, timeout, content-type"
     );
-
     res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, DELETE');
     next();
 });
-
 usuariosApi(app);
-
-//desarrollo
 app.listen(variables.PORT, () => {
-//eslint-disable-next-line no-console
-log(chalk.blueBright(
-  `Escuchando por el puerto http://localhost:${variables.PORT}/api/`));
+    log(chalk.blueBright(
+        `Escuchando por el puerto http://localhost:${variables.PORT}/api/`));
 });
 
