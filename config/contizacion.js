@@ -2,9 +2,9 @@ const sendMailCotizacion = async (correo) => {
    const transporter = createTrans()
    const info = await transporter.sendMail({
 
-      from: '"cotizacion  "<yersonhernandez202@gmail.com>', // sender address
+      from: '"cotizacion  "<yersonhernandez202@gmail.com>', 
       to: `${correo}`,
-      subject: `Cotización`, // Subject line
+      subject: `Cotización`, 
       attachments: [
          {
             name: 'cotizacion.pdf',
