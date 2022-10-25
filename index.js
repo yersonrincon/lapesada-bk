@@ -48,7 +48,6 @@ app.use((req, res, next) => {
         "https://git.heroku.com/lapesada-bk.git",
         "https://lapesada-bk.herokuapp.com/api/administrador/validarCorreoGmail",
     ];
-
     let origin = req.headers.origin;
     log(chalk.red.bgBlue.bold(`origin: ${origin}`));
 
