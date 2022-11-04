@@ -534,8 +534,7 @@ async actualizarEstadoMarca({datos}) {
   return resultSet;
 }
 
-
-
+//s
 async consultaIdproducto() {
   let sql = `SELECt * from producto`;
   const resultSet = await this.sqlServerLib.executeSqlAsync(sql);
