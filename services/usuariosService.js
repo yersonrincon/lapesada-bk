@@ -1,9 +1,7 @@
-const SqlServerLib = require("../lib/sqlserve");
+const SqlServerLib = require("../lib/sqlserverdb");
 const bcrypt =require ("bcryptjs");
 class usuariosService {
-    constructor() {
-        this.sqlServerLib = new SqlServerLib();
-    }
+    
 
     async crearUsuario({datos}){
         console.log(datos);
@@ -534,7 +532,8 @@ async actualizarEstadoMarca({datos}) {
   return resultSet;
 }
 
-//s
+
+
 async consultaIdproducto() {
   let sql = `SELECt * from producto`;
   const resultSet = await this.sqlServerLib.executeSqlAsync(sql);
