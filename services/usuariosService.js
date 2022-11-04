@@ -1,9 +1,7 @@
 const SqlServerLib = require("../lib/sqlserverdb");
 const bcrypt =require ("bcryptjs");
 class usuariosService {
-    constructor() {
-        this.sqlServerLib = new SqlServerLib();
-    }
+   
 
     async crearUsuario({datos}){
         console.log(datos);
