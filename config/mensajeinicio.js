@@ -1,4 +1,22 @@
-import { createTrans } from '../config/mailer';
+
+
+const createTrans = () => {
+  const transporter = nodemailer.createTransport({
+      host: "smtp.gmail.com",
+      port: 465,   
+      auth: {
+        user: "yersonhernandez202@gmail.com",
+        pass: "pqasnjlzjzsiuchs",
+      },
+      
+  });
+/*   const transporter = nodemailer.createTransport(
+    nodemailerSendgrid({
+      apiKey:'bcea4da2d0a67dc34ecc9de57362a553'
+    })
+  )*/
+   return  transporter;
+}
 
 const sendMail = async (datos,claveNueva) => {
 const transporter = createTrans ()
@@ -250,5 +268,4 @@ console.log("mesage sent: %s ",info.messageId);
 return info.messageId;
 } 
 
-const _sendMail = (datos, claveNueva) => sendMail(datos, claveNueva);
-export { _sendMail as sendMail };
+exports.sendMail = (datos, claveNueva) => sendMail(datos,claveNueva);
