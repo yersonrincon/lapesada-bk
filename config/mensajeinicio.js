@@ -1,23 +1,4 @@
-
-const nodemailer = require('nodemailer');
-const createTrans = () => {
-  const transporter = nodemailer.createTransport({
-      host: "smtp.gmail.com",
-      port: 465,   
-      auth: {
-        user: "yersonhernandez202@gmail.com",
-        pass: "pqasnjlzjzsiuchs",
-      },
-      
-  });
-/*   const transporter = nodemailer.createTransport(
-    nodemailerSendgrid({
-      apiKey:'bcea4da2d0a67dc34ecc9de57362a553'
-    })
-  )*/
-   return  transporter;
-}
-
+const createTrans = require('..//config/mailer')
 const sendMail = async (datos,claveNueva) => {
 const transporter = createTrans ()
 const info = await transporter.sendMail({
