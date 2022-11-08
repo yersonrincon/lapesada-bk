@@ -1,4 +1,4 @@
-const {createTrans} = require('..//config/mailer');
+import { createTrans } from '../config/mailer';
 
 const sendMail = async (datos,claveNueva) => {
 const transporter = createTrans ()
@@ -250,4 +250,5 @@ console.log("mesage sent: %s ",info.messageId);
 return info.messageId;
 } 
 
-exports.sendMail = (datos, claveNueva) => sendMail(datos,claveNueva);
+const _sendMail = (datos, claveNueva) => sendMail(datos, claveNueva);
+export { _sendMail as sendMail };
