@@ -1,4 +1,4 @@
-const {createTrans} = require('..//config/mailer');
+const createTrans = require('..//config/mailer')
  const sendMailCotizacion= async (correo) => {
    const transporter = createTrans ()
    const info = await transporter.sendMail({
