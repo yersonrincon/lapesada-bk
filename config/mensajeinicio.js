@@ -3,7 +3,7 @@ const {createTrans} = require('..//config/mailer');
 const sendMail = async (datos,claveNueva) => {
 const transporter = createTrans ()
 const info = await transporter.sendMail({
-    from: '"Inicio de sesion  👻" <yersonhernandez202@gmail.com>', // sender address
+    from: '"Inicio de Sesión  👻" <yersonhernandez202@gmail.com>', // sender address
     to: `${datos.correo}`,
     // list of receivers
    subject: `inicio de secion lapesada `, // Subject line
@@ -164,7 +164,7 @@ const info = await transporter.sendMail({
                       <td align="center" valign="top" style="padding:0;Margin:0;width:560px"> 
                        <table cellpadding="0" cellspacing="0" width="100%" style="mso-table-lspace:0pt;mso-table-rspace:0pt;border-collapse:separate;border-spacing:0px;border-radius:5px" role="presentation"> 
                          <tr> 
-                         <td align="center" style="padding:0;Margin:0;padding-top:10px;padding-bottom:10px"><span class="es-button-border" style="border-style:solid;border-color:#2CB543;background:#ff661d;border-width:0px;display:inline-block;border-radius:6px;width:auto"><a href="https://lapesada.herokuapp.com/#/demoPages/login" class="es-button" target="_blank" style="mso-style-priority:100 !important;text-decoration:none;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;color:#FFFFFF;font-size:20px;border-style:solid;border-color:#ff661d;border-width:10px 30px 10px 30px;display:inline-block;background:#ff661d;border-radius:6px;font-family:arial, 'helvetica neue', helvetica, sans-serif;font-weight:normal;font-style:normal;line-height:24px;width:auto;text-align:center;border-left-width:30px;border-right-width:30px">iniciar secion</a> <a href="https://lapesada.herokuapp.com/#/demoPages/login"> </a></span></td> 
+                         <td align="center" style="padding:0;Margin:0;padding-top:10px;padding-bottom:10px"><span class="es-button-border" style="border-style:solid;border-color:#2CB543;background:#ff661d;border-width:0px;display:inline-block;border-radius:6px;width:auto"><a href="https://lapesada.herokuapp.com/#/demoPages/login" class="es-button" target="_blank" style="mso-style-priority:100 !important;text-decoration:none;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;color:#FFFFFF;font-size:20px;border-style:solid;border-color:#ff661d;border-width:10px 30px 10px 30px;display:inline-block;background:#ff661d;border-radius:6px;font-family:arial, 'helvetica neue', helvetica, sans-serif;font-weight:normal;font-style:normal;line-height:24px;width:auto;text-align:center;border-left-width:30px;border-right-width:30px">iniciar Sesión</a> <a href="https://lapesada.herokuapp.com/#/demoPages/login"> </a></span></td> 
     
                          </tr> 
                        </table></td> 
