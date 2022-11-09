@@ -1,6 +1,5 @@
 
 const nodemailer = require('nodemailer');
-//const nodemailerSendgrid = require('nodemailer-sendgrid');
  
      const createTrans = () => {
        const transporter = nodemailer.createTransport({
@@ -12,11 +11,6 @@ const nodemailer = require('nodemailer');
            },
            
        });
-    /*   const transporter = nodemailer.createTransport(
-         nodemailerSendgrid({
-           apiKey:'bcea4da2d0a67dc34ecc9de57362a553'
-         })
-       )*/
         return  transporter;
    }
 
