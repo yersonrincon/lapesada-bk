@@ -15,7 +15,7 @@ const nodemailer = require('nodemailer');
    }
 
  
- const sendMailCotizacion= async (correo) => {
+ /*const sendMailCotizacion= async (correo) => {
    const transporter = createTrans ()
    const info = await transporter.sendMail({
      
@@ -31,7 +31,7 @@ const nodemailer = require('nodemailer');
      });
    console.log("mesage sent: %s ",info.messageId);
     return info.messageId;
- }   
+ }   */
 exports.sendMail = (datos, claveNueva) => sendMail(datos,claveNueva)
 exports.sendMailpassword = (datos,token) => sendMailpassword(datos,token);
 exports.sendMailCotizacion = (datos) => sendMailCotizacion(datos);
