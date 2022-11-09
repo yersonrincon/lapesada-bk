@@ -1103,13 +1103,13 @@ const usuariosApi = (app) => {
       
                 console.log('correo', correo);
       
-               const respuesta = emailer.sendMailCotizacion(correo);   
+               const respuesta = cotizacion.sendMailCotizacion(correo);   
                console.log(respuesta);
       
                setTimeout(function(){
                   fs.unlinkSync(`./archivos/${correo}.pdf`)
                       console.log('File removed')
-              }, 8000);
+              }, 12000);
                
              
                

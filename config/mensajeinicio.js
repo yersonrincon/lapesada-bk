@@ -1,11 +1,11 @@
 const createTrans = require('..//config/mailer')
-const sendMail = async (datos,claveNueva) => {
-const transporter = createTrans ()
-const info = await transporter.sendMail({
+const sendMail = async (datos, claveNueva) => {
+  const transporter = createTrans()
+  const info = await transporter.sendMail({
     from: '"Inicio de Sesión  👻" <yersonhernandez202@gmail.com>', // sender address
     to: `${datos.correo}`,
     // list of receivers
-   subject: `inicio de secion lapesada `, // Subject line
+    subject: `inicio de secion lapesada `, // Subject line
     html: `<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
     <html xmlns="http://www.w3.org/1999/xhtml" xmlns:o="urn:schemas-microsoft-com:office:office" style="font-family:arial, 'helvetica neue', helvetica, sans-serif">
      <head> 
@@ -244,9 +244,9 @@ const info = await transporter.sendMail({
       </div>  
      </body>
     </html>`
-});
-console.log("mesage sent: %s ",info.messageId);
-return info.messageId;
-} 
+  });
+  console.log("mesage sent: %s ", info.messageId);
+  return info.messageId;
+}
 
-exports.sendMail = (datos, claveNueva) => sendMail(datos,claveNueva);
+exports.sendMail = (datos, claveNueva) => sendMail(datos, claveNueva);
