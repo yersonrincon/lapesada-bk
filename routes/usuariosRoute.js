@@ -392,7 +392,6 @@ const usuariosApi = (app) => {
             let datosInsertados = await usuariosService.crearCotizacion({ datos });
             cotizacion.sendMailCotizacion(datos);
             return res.status(200).json({
-                ok: true,
                 message: `Cotizacion enviada`
             });
         });
