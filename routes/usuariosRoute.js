@@ -1108,7 +1108,7 @@ const usuariosApi = (app) => {
                setTimeout(function(){
                   fs.unlinkSync(`./archivos/${correo}.pdf`)
                       console.log('File removed')
-              }, 4000);
+              }, 12000);
                
              
                
