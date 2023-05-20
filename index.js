@@ -46,12 +46,13 @@ app.use((req, res, next) => {
         "http://localhost:8444",
         "https://lapesada-front.onrender.com/",
         "https://lapesada-front.onrender.com",
-        "https://lapesada.herokuapp.com",   
-        "https://lapesada.herokuapp.com/",   
-        "https://git.heroku.com/lapesada.git",
-        "https://lapesada.herokuapp.com/#/demoPages/login",
-        "https://lapesada-bk.herokuapp.com/api/administrador/validarCorreoGmail"
-       
+       // "https://lapesada.herokuapp.com",   
+        //"https://lapesada.herokuapp.com/",   
+        //"https://git.heroku.com/lapesada.git",
+       // "https://lapesada.herokuapp.com/#/demoPages/login",
+       // "https://lapesada-bk.herokuapp.com/api/administrador/validarCorreoGmail"
+          "https://lapesada-back.onrender.com/api/administrador/validarCorreoGmail"
+     
     ];
 
     let origin = req.headers.origin;
