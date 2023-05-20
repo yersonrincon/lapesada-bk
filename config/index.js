@@ -8,7 +8,7 @@ const config = {
     authJwtSecret: process.env.AUTH_JWT_SECRET,
     expiresIn: process.env.EXPIRES_IN,
 }
-/*const dbConfig = {
+  /*  const dbConfig = {
     user: process.env.DB_USER,
     password: process.env.DB_PASSWORD,
     server: process.env.DB_HOST,
@@ -21,12 +21,16 @@ const config = {
         idleTimeoutMillis: 300000,
         max: 100
     }
-};*/
+    
+};
+const variables = {
+    PORT: process.env.PORT || 3000,
+} */
 const dbConfig = {
-    user: 'eeomlysybxiukm',
-    host: 'ec2-34-192-83-52.compute-1.amazonaws.com',
-    database: 'dcpgsgbaprtnop',
-    password: 'fea8bcdc5b8d9dbb98770e04c1e87c44aba48ac0e2cecaa338685f074afa836a',
+    user: 'lapesadadb_user',
+    host: 'dpg-chk4tmbhp8uej76k28d0-a.oregon-postgres.render.com',
+    database: 'lapesadadb',
+    password: '4Ws4FSjgJ6L8lpyZufvTswbLVgrSX3R7',
     port: 5432,
     ssl: true,
     ssl: { rejectUnauthorized: false }

@@ -392,7 +392,7 @@ const usuariosApi = (app) => {
             let datosInsertados = await usuariosService.crearCotizacion({ datos });
             cotizacion.sendMailCotizacion(datos);
             return res.status(200).json({
-                ok:true,
+                ok: true,
                 message: `Cotizacion enviada`
             });
         });
@@ -1063,12 +1063,12 @@ const usuariosApi = (app) => {
             });
         });
 
-        router.post('/cargar',
+    router.post('/cargar',
         app.use(fileUpload()),
-        function(req, res) {
-      
+        function (req, res) {
+
             let correo = req.query.correo;
-      
+
             if (!req.files) {
                 return res.status(400).json({
                     ok: false,
@@ -1078,49 +1078,39 @@ const usuariosApi = (app) => {
             let archivo = req.files.archivo;
             let nombreCortado = archivo.name.split('.');
             let extension = nombreCortado[nombreCortado.length - 1];
-      
-              console.log(archivo);
-              console.log(correo);
-              
-              let extensionesPermitidas = ['pdf'];
-      
+            //console.log(archivo);
+            //console.log(correo);
+            let extensionesPermitidas = ['pdf'];
             if (extensionesPermitidas.indexOf(extension) < 0) {
                 return res.status(200).json({
                     ok: false,
                     message: 'La extensión de los archivos debe ser .pdf'
                 });
             }
-       
             filePath = path.resolve(__dirname, `../archivos`) + '/' + archivo.name;
-      
-            archivo.mv(filePath, function(err) {
+            archivo.mv(filePath, function (err) {
                 if (err) {
                     return res.status(500).json({
                         ok: false,
                         err
                     });
                 }
-      
-                console.log('correo', correo);
-      
-               const respuesta = cotizacion.sendMailCotizacion(correo);   
-               console.log(respuesta);
-      
-               setTimeout(function(){
-                  fs.unlinkSync(`./archivos/${correo}.pdf`)
-                      console.log('File removed')
-              }, 12000);
-               
-             
-               
-                res.json({
-                    ok: true,
-                    message: 'Cotización enviada '
-                });
+                // console.log('correo', correo);
+                const respuesta = cotizacion.sendMailCotizacion(correo);
+                //console.log(respuesta);
+                setTimeout(function () {
+                    fs.unlinkSync(`./archivos/${correo}.pdf`)
+                    console.log('File removed')
+                }, 12000);
+
+                /*  res.json({
+                      ok: true,
+                      message: 'Cotización enviada '
+                  });*/
             })
         });
-      
-      };
+
+};
 
 
 
