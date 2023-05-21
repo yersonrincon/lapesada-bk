@@ -46,6 +46,7 @@ app.use((req, res, next) => {
         "http://localhost:8444",
         "https://lapesada-front.onrender.com",
         "http://lapesada-front.onrender.com",
+        "https://lapesada-front.onrender.com/#/demoPages/login",
        // "https://lapesada.herokuapp.com",   
         //"https://lapesada.herokuapp.com/",   
         //"https://git.heroku.com/lapesada.git",

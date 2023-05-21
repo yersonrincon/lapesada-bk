@@ -405,7 +405,7 @@ class usuariosService {
     const resultSet = await this.sqlServerLib.executeSqlAsync(sql);
     return resultSet.rows;
   }
-  
+
 
   async editarClienteAlmacen({ datos }) {
     console.log(datos)
@@ -423,7 +423,7 @@ class usuariosService {
   }
   async editarMarca({ datos }) {
     console.log(datos)
-    let sql = `UPDATE marca SET  nombre='${datos.nombre}',descripcion='${datos.descripcion}'`; 
+    let sql = `UPDATE marca SET  nombre='${datos.nombre}',descripcion='${datos.descripcion}'`;
     sql += ` WHERE id='${datos.id}'`;
     const resultSet = await this.sqlServerLib.executeSqlAsync(sql);
     return resultSet.rows;
