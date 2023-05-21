@@ -504,22 +504,17 @@ const usuariosApi = (app) => {
 
 
 
-    router.post('/editarMarca',
+        router.post('/editarMarca',
         async function (req, res, next) {
-            const { body: datos } = req;
-
-            let datosInsertados = await usuariosService.buscarMarca({ datos });
-            if (datosInsertados.length > 0) {
-
-
-            } else {
-                let crearproducto = await usuariosService.editarMarca({ datos });
+            const { body: datos } = req;       
+                let crearmarca = await usuariosService.editarMarca({ datos });
                 return res.status(200).json({
                     ok: true,
                     message: `hemos editado el registro`
                 });
-            }
+            
         });
+
 
     router.post('/crearMarca',
         async function (req, res, next) {
@@ -542,10 +537,8 @@ const usuariosApi = (app) => {
 
     router.post('/editarUsuario',
         async function (req, res, next) {
-
             const { body: datos } = req;
             let datosInsertados = await usuariosService.editarUsuario({ datos });
-
             return res.status(200).json({
                 ok: true,
                 message: `hemos editado el registro.`
@@ -558,11 +551,21 @@ const usuariosApi = (app) => {
 
 
 
+router.post('/editarClientesAlmacen',
+async function (req,res){
+    const {body: datos}= req;
+    console.log(datos);
+    let editarClienteAlmacen= await usuariosService.editarClienteAlmacen({datos});
+    return res.status(200).json({
+        ok: true,
+        message: `hemos editado el registro.`
+    });
+});
+
 
 
     router.post('/editarCategoria',
         async function (req, res, next) {
-
             const { body: datos } = req;
             let datosInsertados = await usuariosService.editarCategoria({ datos });
             return res.status(200).json({
@@ -585,6 +588,7 @@ const usuariosApi = (app) => {
     router.post('/editarEmpresa',
         async function (req, res, next) {
             const { body: datos } = req;
+            console.log (datos);
             let datosInsertados = await usuariosService.editarEmpresa({ datos });
             return res.status(200).json({
                 ok: true,
@@ -888,6 +892,19 @@ const usuariosApi = (app) => {
             });
         });
 
+        router.post('/consultarCantidadAlmacenes',
+        async function (req, res, next) {
+            const { body: datos } = req;
+            let empresa = await usuariosService.consultarCantidadAlmacenes({ datos });
+            return res.status(200).json({
+                ok: true,
+                empresa,
+                message: `datos.`
+            });
+        });
+
+        
+ 
 
     router.post('/consultaralmacenes',
 

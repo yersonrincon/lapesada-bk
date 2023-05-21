@@ -51,7 +51,8 @@ app.use((req, res, next) => {
         //"https://git.heroku.com/lapesada.git",
        // "https://lapesada.herokuapp.com/#/demoPages/login",
        // "https://lapesada-bk.herokuapp.com/api/administrador/validarCorreoGmail"
-          "https://lapesada-back.onrender.com/api/administrador/validarCorreoGmail"
+          "https://lapesada-back.onrender.com/api/administrador/validarCorreoGmail",
+          "http://lapesada-back.onrender.com/api/administrador/validarCorreoGmail"
      
     ];
 
