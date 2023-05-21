@@ -30,7 +30,7 @@ const dbConfig = {
     user: 'lapesadadb_user',
     host: 'dpg-chk4tmbhp8uej76k28d0-a.oregon-postgres.render.com',
     database: 'lapesadadb',
-    password: 'fea8bcdc5b8d9dbb98770e04c1e87c44aba48ac0e2cecaa338685f074afa836a',
+    password: '4Ws4FSjgJ6L8lpyZufvTswbLVgrSX3R7',
     port: 5432,
     ssl: true,
     ssl: { rejectUnauthorized: false }
