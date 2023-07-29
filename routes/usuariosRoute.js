@@ -903,9 +903,6 @@ async function (req,res){
             });
         });
 
-        
- 
-
     router.post('/consultaralmacenes',
 
         async function (req, res, next) {
@@ -1112,18 +1109,13 @@ async function (req,res){
                         err
                     });
                 }
-                // console.log('correo', correo);
                 const respuesta = cotizacion.sendMailCotizacion(correo);
-                //console.log(respuesta);
                 setTimeout(function () {
                     fs.unlinkSync(`./archivos/${correo}.pdf`)
                     console.log('File removed')
                 }, 12000);
 
-                /*  res.json({
-                      ok: true,
-                      message: 'Cotización enviada '
-                  });*/
+        
             })
         });
 
