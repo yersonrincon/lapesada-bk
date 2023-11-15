@@ -18,5 +18,6 @@ const nodemailer = require('nodemailer');
 //exports.sendMail = (datos, claveNueva) => sendMail(datos,claveNueva)
 //exports.sendMailpassword = (datos,token) => sendMailpassword(datos,token);
 //exports.sendMailCotizacion = (datos) => sendMailCotizacion(datos);
+//
 module.exports= createTrans;
 
