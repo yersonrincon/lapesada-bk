@@ -79,7 +79,7 @@ app.use((req, res, next) => {
 
 usuariosApi(app);
 
-//desarrollo
+//desarrollo//
 app.listen(variables.PORT, () => {
 //eslint-disable-next-line no-console
 log(chalk.blueBright(
