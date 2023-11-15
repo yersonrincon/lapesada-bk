@@ -25,7 +25,7 @@ class usuariosService {
     const resultSet = await this.sqlServerLib.executeSqlAsync(sql);
     return resultSet.rows[0];
   }
-  async consultarCantidadventas() {
+  async consultarCantidads() {
     let sql = `select  count(*) from venta`;
     const resultSet = await this.sqlServerLib.executeSqlAsync(sql);
     return resultSet.rows[0];
@@ -35,6 +35,13 @@ class usuariosService {
     const resultSet = await this.sqlServerLib.executeSqlAsync(sql);
     return resultSet.rows[0];
   }
+
+  async consultarCantidadventas() {
+    let sql = `select  count(*) from venta`;
+    const resultSet = await this.sqlServerLib.executeSqlAsync(sql);
+    return resultSet.rows[0];
+  }
+
   async consultarCantidadAlmacenes() {
     let sql = `select  count(*) from empresa`;
     const resultSet = await this.sqlServerLib.executeSqlAsync(sql);

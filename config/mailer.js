@@ -6,8 +6,8 @@ const nodemailer = require('nodemailer');
            host: "smtp.gmail.com",
            port: 465,   
            auth: {
-             user: "ylhernandez54@misena.edu.co",
-             pass: "umrlnhuowsnalltp",
+             user: "yersonhernandez9999@gmail.com",
+             pass: "wtip tzcx tzvs csvz",
            },
            
        });

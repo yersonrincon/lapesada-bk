@@ -27,10 +27,10 @@ const variables = {
   PORT: process.env.PORT || 3000,
 } */
 const dbConfig = {
-    user: 'lapesadadb_user',
-    host: 'dpg-chk4tmbhp8uej76k28d0-a.oregon-postgres.render.com',
-    database: 'lapesadadb',
-    password: '4Ws4FSjgJ6L8lpyZufvTswbLVgrSX3R7',
+    user: 'lapesadadb_7hx5_user',
+    host: 'dpg-cl9s2shm6hds73dc1c8g-a.oregon-postgres.render.com',
+    database: 'lapesadadb_7hx5',
+    password: 'tqW3wsljgGtYnKiMFtagHpJPUGFGSNz6',
     port: 5432,
     ssl: true,
     ssl: { rejectUnauthorized: false }
